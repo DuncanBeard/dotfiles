@@ -1,0 +1,28 @@
+# Colors.
+unset LSCOLORS
+export CLICOLOR=1
+export CLICOLOR_FORCE=1
+
+# Nicer prompt.
+export PS1=$'\n'"%F{green} %*%F %3~ %F{white}$ "
+
+# Bash-style time output.
+export TIMEFMT=$'\nreal\t%*E\nuser\t%*U\nsys\t%*S'
+
+# Include alias file (if present) containing aliases for ssh, etc.
+if [ -f ~/.aliases ]
+then
+  source ~/.aliases
+fi
+
+# Git aliases.
+alias gs='git status'
+alias gc='git commit'
+alias gp='git pull --rebase'
+alias gcam='git commit -am'
+alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias kc='kubectl'
+
+# Tell homebrew to not autoupdate every single time I run it (just once a week).
+export HOMEBREW_AUTO_UPDATE_SECS=604800
+

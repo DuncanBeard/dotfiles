@@ -1,0 +1,196 @@
+export EDITOR=/usr/bin/vim
+
+if [ "${SAVED_PATH:-==Unset==}" = "==Unset==" ]; then
+    export SAVED_PATH="${PATH}"
+else
+    export PATH="${SAVED_PATH}"
+fi
+
+# Some systems have less, some don't - if we don't, just use more
+
+if ( type less > /dev/null 2>&1 ); then
+    export LESS="-ImRs"
+    export PAGER="less"
+else
+    alias less="more"
+    export MORE="-is"
+fi
+
+# For 'ls', use colors if we have them (and use LS_OPTIONS if it exists)
+
+if [ $(uname -s) = "Linux" -a -f /etc/SuSE-release ]; then
+    if [ "${LS_OPTIONS}" != "" ]; then
+	export LS_OPTIONS="${LS_OPTIONS} -p"
+    else
+	alias ls="ls -N --color=tty -T 0 -p"
+    fi
+else
+    alias ls="ls -p"
+fi
+
+export PATH=/usr/local/bin:$PATH
+
+#
+# Functions
+#
+
+# Function: global_find
+#
+# Search for a string globally throughout a directory structure
+#
+# Parameters:
+#   String to search	(Typically quoted) String to search for
+#   Search Path		Directory search path to begin searching at
+
+global_find_usage()
+{
+    echo "Usage: global_find <search-string> <search-path>" 1>&2
+}
+
+global_find()
+{
+    if [ -z "${1}" -o -z "${2}" ]; then
+	global_find_usage
+	return 1;
+    fi
+
+    echo "Starting search for string \"$1\" in file path \"$2\" ..."
+
+    # Only Linux appears to have '-0' for xargs ...
+    if [ $(uname -s) = "Linux" ]; then
+	find $2 -type f -print0 | xargs -0 grep -i "$1"
+    else
+	find $2 -type f | xargs grep -i "$1"
+    fi
+}
+
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ~="cd ~" # `cd` is probably faster to type though
+alias -- -="cd -"
+
+# Shortcuts
+alias d="cd ~/Documents"
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+alias g="git"
+alias ga="git add"
+alias h="history"
+alias j="jobs"
+alias gs="git status"
+alias gb="git checkout -b"
+alias be="bundle exec"
+alias bi="bundle install"
+alias bu="bundle update"
+
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
+
+# List all files colorized in long format, including dot files
+alias la="ls -laF ${colorflag}"
+
+# List only directories
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Custom prompt
+# get current branch in git repo
+function parse_git_branch() {
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT=`parse_git_dirty`
+		echo "[${BRANCH}${STAT}]"
+	else
+		echo ""
+	fi
+}
+
+# get current status of git repo
+function parse_git_dirty {
+	status=`git status 2>&1 | tee`
+	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	bits=''
+	if [ "${renamed}" == "0" ]; then
+		bits=">${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits="*${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits="+${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits="?${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits="x${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits="!${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+		echo " ${bits}"
+	else
+		echo ""
+	fi
+}
+
+
+export PS1="[\t]\[\e[32m\]\u\[\e[m\]@\[\e[34m\]\h\[\e[m\]:\[\e[33m\]\w\[\e[m\]\[\e[36m\]\`parse_git_branch\`\[\e[m\]\\$ "
+
+# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade --all; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update'
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# Stuff I never really use but cannot delete either because of http://xkcd.com/530/
+alias stfu="osascript -e 'set volume output muted true'"
+alias pumpitup="osascript -e 'set volume 7'"
+
+# Kill all the tabs in Chrome to free up memory
+# [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
+alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
+
+# Lock the screen (when going AFK)
+alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"
+
+# Kill the Touch Bar
+alias killtouchbar="sudo pkill -f TouchBarServer"
+
+export HISTSIZE=""
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# Unified Bash History
+shopt -s histappend
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+
+source $HOME/.bashrc

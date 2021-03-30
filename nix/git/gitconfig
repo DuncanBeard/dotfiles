@@ -1,0 +1,28 @@
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    ds = diff --staged
+    lg = log -p
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
+    ls = ls-files
+    unstage = reset HEAD
+	co-master = !git checkout master && git submodule foreach git checkout master
+	nuke = !git clean -fdx && git submodule foreach git clean -fdx
+	sub-status = !git submodule foreach git status
+	sync-subs = !git pull && git remote prune origin && git submodule foreach git pull && git submodule foreach git remote prune origin
+	rmrbranch = push origin --delete  # <Branch-name> supplied by user
+	rmrprune = remote prune origin
+    # Show files ignored by git:
+    ign = ls-files -o -i --exclude-standard
+
+[core]
+	editor = vim
+	excludesfile = /Users/dbeard/.gitignore_global
+
+[user]
+	name = Duncan Beard
+	email = duncanmbeard@gmail.com
