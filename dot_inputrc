@@ -1,0 +1,11 @@
+# bind up arrow to reverse-i search back
+"\e[A": history-search-backward
+# bind down arrow to reverse-i search forwards
+"\e[B": history-search-forward
+
+"\e[1;5C": forward-word # ctrl + right
+"\e[1;5D": backward-word # ctrl + left
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
