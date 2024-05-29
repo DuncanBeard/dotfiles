@@ -1,0 +1,12 @@
+{{ if (eq .chezmoi.os "windows") }}
+Library
+.config/nushell/**
+{{ end }}
+{{ if (eq .chezmoi.os "darwin") }}
+AppData
+.config/nushell/**
+{{ end }}
+{{ if (eq .chezmoi.os "linux") }}
+AppData
+Library
+{{ end }}
