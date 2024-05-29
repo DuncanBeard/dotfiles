@@ -1,0 +1,11 @@
+[user]
+	name = Duncan Beard
+	email = duncanbeard@microsoft.com
+
+{{ if (eq .chezmoi.os "windows") }}
+[core]
+	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+[safe]
+	directory = C:\\Users\\duncanbeard\\Notes
+	directory = C:/Users/duncanbeard/Notes
+{{ end }}
