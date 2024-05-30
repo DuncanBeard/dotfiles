@@ -1,6 +1,6 @@
 [user]
 	name = Duncan Beard
-	email = duncanbeard@microsoft.com
+	email = {{ $email | quote }}
 
 {{ if (eq .chezmoi.os "windows") }}
 [core]

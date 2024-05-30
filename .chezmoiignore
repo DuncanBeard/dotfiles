@@ -5,9 +5,10 @@ Library
 {{ end }}
 {{ if (eq .chezmoi.os "darwin") }}
 AppData
-.config/nushell/**
+**/*.ps1
 {{ end }}
 {{ if (eq .chezmoi.os "linux") }}
 AppData
 Library
+**/*.ps1
 {{ end }}
