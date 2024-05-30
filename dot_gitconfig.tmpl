@@ -1,6 +1,6 @@
 [user]
 	name = Duncan Beard
-	email = {{ $email | quote }}
+	email = {{ .email | quote }}
 
 {{ if (eq .chezmoi.os "windows") }}
 [core]
