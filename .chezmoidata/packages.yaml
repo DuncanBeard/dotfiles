@@ -3,4 +3,4 @@ packages:
     brews:
     - 'git'
     casks:
-    - 'google-chrome'
+    - 'arc'
