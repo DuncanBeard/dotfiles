@@ -4,3 +4,6 @@ packages:
     - 'git'
     casks:
     - 'arc'
+  windows:
+    winget:
+    - "PrimateLabs.Geekbench.6"
