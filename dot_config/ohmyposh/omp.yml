@@ -9,7 +9,7 @@ blocks:
     style: diamond
     foreground: "#ffffff"
     background: "#0077c2"
-    leading_diamond: ╭─
+    leading_diamond: 
     template: "\uf120 {{ .Name }} "
   - type: root
     style: diamond
@@ -194,10 +194,6 @@ blocks:
 - type: prompt
   alignment: left
   segments:
-  - type: text
-    style: plain
-    foreground: "#21c7c7"
-    template: ╰─
   - type: status
     style: plain
     foreground: "#e0f8ff"
@@ -207,3 +203,9 @@ blocks:
     properties:
       always_enabled: true
   newline: true
+
+transient_prompt:
+  alignment: left
+  newline: true
+  foreground: "#e0f8ff"
+  template: "\ue285\ueab6 "
