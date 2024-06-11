@@ -1,6 +1,7 @@
 # oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/atomic.omp.json" | Invoke-Expression
-if (Test-Path "$HOME\.ohmyposh\omp.yml") {
-  oh-my-posh init pwsh --config "$HOME\.ohmyposh\omp.yml" | Invoke-Expression
+$omppath = "$HOME\.config\ohmyposh\omp.yml"
+if (Test-Path $omppath) {
+  oh-my-posh init pwsh --config $omppath | Invoke-Expression
 } else {
   oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/atomic.omp.json' | Invoke-Expression
 }
