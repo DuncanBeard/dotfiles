@@ -7,6 +7,26 @@ packages:
   windows:
     winget:
     - "PrimateLabs.Geekbench.6"
+    - 7zip.7zip
+    - AgileBits.1Password
+    - AntibodySoftware.WizTree
+    - Docker.DockerDesktop
+    - Dropbox.Dropbox
+    - Evernote.Evernote
+    - GeekUninstaller.GeekUninstaller
+    - Git.Git
+    - GitHub.cli
+    - Greenshot.Greenshot
+    - JanDeDobbeleer.OhMyPosh
+    - Logseq.Logseq
+    - Microsoft.PowerShell
+    - Microsoft.PowerToys
+    - Microsoft.RemoteDesktopClient
+    - Microsoft.VisualStudioCode
+    - Notepad++.Notepad++
+    - Obsidian.Obsidian
+    - PrimateLabs.Geekbench.6
+    - TheBrowserCompany.Arc
   linux:
     apt:
     - 'vim'
