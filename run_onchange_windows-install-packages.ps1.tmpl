@@ -1,0 +1,14 @@
+{{ if eq .chezmoi.os "windows" -}}
+Write-Host "Installing Windows packages using winget"
+
+if (!(Get-Command winget -ErrorAction SilentlyContinue)) {
+  Write-Host "winget is not installed. Please install it."
+  # Add code here to install winget if desired
+  exit 1
+}
+
+{{ range .packages.windows.winget -}}
+winget install {{ . | quote }}
+{{ end -}}
+
+{{ end -}}

@@ -6,7 +6,35 @@ packages:
     - 'arc'
   windows:
     winget:
-    - "PrimateLabs.Geekbench.6"
+    - 7zip.7zip
+    - AgileBits.1Password
+    - AntibodySoftware.WizTree
+    - Docker.DockerDesktop
+    - Dropbox.Dropbox
+    - Evernote.Evernote
+    - Git.Git
+    - GitHub.cli
+    - Greenshot.Greenshot
+    - Insomnia.Insomnia
+    - Insta360.Link.Controller
+    - JanDeDobbeleer.OhMyPosh
+    - Logseq.Logseq
+    - Microsoft.AzureCLI
+    - Microsoft.Edge
+    - Microsoft.OneDrive
+    - Microsoft.PowerShell
+    - Microsoft.RemoteDesktopClient
+    - Microsoft.Teams
+    - Microsoft.VisualStudio.2022.Enterprise
+    - Microsoft.VisualStudioCode
+    - Microsoft.WindowsTerminal
+    - MSIX\DropboxInc.Dropbox_205.3.5742.0_x64_ΓÇª 205.3.5742.0
+    - Notepad++.Notepad++
+    - PrimateLabs.Geekbench.6
+    - REALiX.HWiNFO
+    - TheBrowserCompany.Arc
+    - twpayne.chezmoi
+    - WinDirStat.WinDirStat
   linux:
     apt:
     - 'vim'
