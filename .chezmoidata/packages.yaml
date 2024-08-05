@@ -12,6 +12,7 @@ packages:
     - Docker.DockerDesktop
     - Dropbox.Dropbox
     - Evernote.Evernote
+    - GeekUninstaller.GeekUninstaller
     - Git.Git
     - GitHub.cli
     - Greenshot.Greenshot
@@ -23,13 +24,14 @@ packages:
     - Microsoft.Edge
     - Microsoft.OneDrive
     - Microsoft.PowerShell
+    - Microsoft.PowerToys
     - Microsoft.RemoteDesktopClient
     - Microsoft.Teams
     - Microsoft.VisualStudio.2022.Enterprise
     - Microsoft.VisualStudioCode
     - Microsoft.WindowsTerminal
-    - MSIX\DropboxInc.Dropbox_205.3.5742.0_x64_ΓÇª 205.3.5742.0
     - Notepad++.Notepad++
+    - Obsidian.Obsidian
     - PrimateLabs.Geekbench.6
     - REALiX.HWiNFO
     - TheBrowserCompany.Arc
