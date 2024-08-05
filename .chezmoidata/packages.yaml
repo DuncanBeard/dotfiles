@@ -31,7 +31,6 @@ packages:
     - Microsoft.VisualStudioCode
     - Microsoft.WindowsTerminal
     - Notepad++.Notepad++
-    - Obsidian.Obsidian
     - PrimateLabs.Geekbench.6
     - REALiX.HWiNFO
     - TheBrowserCompany.Arc
