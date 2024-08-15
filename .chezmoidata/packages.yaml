@@ -38,5 +38,4 @@ packages:
     - WinDirStat.WinDirStat
   linux:
     apt:
-    - 'vim'
-    - 'net-tools'
+    - 'vim'        
