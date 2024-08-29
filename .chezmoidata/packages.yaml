@@ -39,3 +39,8 @@ packages:
   linux:
     apt:
     - 'vim'        
+    - "PrimateLabs.Geekbench.6"
+    apks:
+    - 'git'
+    - 'vim'
+    - 'tmux'
