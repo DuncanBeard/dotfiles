@@ -2,6 +2,7 @@ README.md
 {{ if (eq .chezmoi.os "windows") }}
 Library
 .config/nushell/**
+.inputrc
 {{ end }}
 {{ if (eq .chezmoi.os "darwin") }}
 AppData
