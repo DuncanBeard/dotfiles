@@ -5,10 +5,7 @@
  :logseq-heatmap {:version "v2.4.3", :repo "pengx17/logseq-plugin-heatmap", :effect true, :theme false}
  :logseq-copy-code-plugin {:version "v.1.2.0", :repo "vyleung/logseq-copy-code-plugin", :effect true, :theme false}
  :logseq-code-formatter {:version "v1.1.1", :repo "PerfectPan/logseq-plugin-code-formatter", :effect false, :theme false}
- :logseq-automatic-linker {:version "1.7.0", :repo "sawhney17/logseq-automatic-linker", :effect false, :theme false}
  :logseq-monokai {:version "v0.1.1", :repo "tzcl/logseq-monokai", :effect false, :theme true}
- :logseq-markdown-table {:version "v1.8.1", :repo "haydenull/logseq-plugin-markdown-table", :effect false, :theme false}
- :logseq-readwise-official-plugin {:version "v1.4.11", :repo "readwiseio/logseq-readwise-official-plugin", :effect true, :theme false}
  :logseq-atlas-theme {:version "v0.3.5", :repo "sethfair/logseq-atlas-theme", :effect false, :theme true}
  :logseq-one-theme {:version "v0.3.1", :repo "femto-code/logseq-one-theme", :effect false, :theme true}
  :logseq-luma {:version "0.3.1", :repo "gavinmn/logseq-luma", :effect false, :theme true}
