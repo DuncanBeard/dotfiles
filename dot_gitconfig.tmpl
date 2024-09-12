@@ -2,7 +2,8 @@
 	name = Duncan Beard
 	email = {{ .email | quote }}
 
-{{ if (eq .chezmoi.os "windows") }}
 [core]
+	autocrlf = true
+{{ if (eq .chezmoi.os "windows") }}
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 {{ end }}
