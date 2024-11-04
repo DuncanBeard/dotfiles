@@ -27,6 +27,7 @@ packages:
     - Microsoft.PowerToys
     - Microsoft.RemoteDesktopClient
     - Microsoft.Teams
+    - Microsoft.Bicep
     - Microsoft.VisualStudio.2022.Enterprise
     - Microsoft.VisualStudioCode
     - Microsoft.WindowsTerminal
