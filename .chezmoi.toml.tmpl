@@ -5,3 +5,7 @@
     
 [edit]
     command = "code"
+
+[merge]
+    command = "pwsh"
+    args = ["-Command", "cp {{ `{{ .Target }}` }} {{ `{{ .Target }}` }}.base && code --wait --new-window --merge {{ `{{ .Destination }}` }} {{ `{{ .Target  }}` }} {{ `{{ .Target }}` }}.base {{ `{{ .Source }}` }}"]
