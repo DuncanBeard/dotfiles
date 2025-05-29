@@ -1,6 +1,6 @@
 {
   "[arm-template]": {
-    "sortJSON.orderOverride": [] // This setting cannot be applied because it is not registered as language override setting. :(
+    "sortJSON.orderOverride": [ ] // This setting cannot be applied because it is not registered as language override setting. :(
   },
   "[azure-pipelines]": {
     "editor.autoIndent": "full",
@@ -29,7 +29,7 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
     "files.trimTrailingWhitespace": false
   },
   "[typescript]": {
@@ -41,7 +41,6 @@
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
   },
-  "@azure.argTenant": "",
   "appService.showSavePrompt": false,
   "azure.resourceFilter": [
     "72f988bf-86f1-41af-91ab-2d7cd011db47/07bc6e15-9c39-427a-be7e-0f8cfcb9b57c",
@@ -80,7 +79,7 @@
   "editor.accessibilitySupport": "off",
   "editor.autoIndent": "full",
   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "editor.codeActionsOnSave": {},
+  "editor.codeActionsOnSave": { },
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorSurroundingLines": 5,
@@ -89,9 +88,8 @@
   "editor.experimental.pasteActions.enabled": true,
   "editor.find.seedSearchStringFromSelection": "selection",
   "editor.foldingImportsByDefault": false,
-  "editor.fontFamily": "Hack Nerd Font Mono",
+  "editor.fontFamily": "Hack Nerd Font, FiraCode Nerd Font, Consolas, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontSize": 16,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.guides.bracketPairs": false,
@@ -161,7 +159,6 @@
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
   "git.autoStash": true,
-  "git.branchPrefix": "dev/duncanbeard/",
   "git.closeDiffOnOperation": true,
   "git.confirmSync": false,
   "git.countBadge": "tracked",
@@ -179,11 +176,10 @@
   "git.timeline.showUncommitted": true,
   "git.untrackedChanges": "separate",
   "git.useCommitInputAsStashMessage": true,
-  "github.copilot-labs.advanced": {},
+  "github.copilot-labs.advanced": { },
   "github.copilot-labs.showBrushesLenses": true,
   "github.copilot-labs.showTestGenerationLenses": true,
-  "github.copilot.advanced": {},
-  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.advanced": { },
   "github.copilot.enable": {
     "*": true,
     "markdown": true,
@@ -192,9 +188,6 @@
     "yaml": true
   },
   "github.copilot.nextEditSuggestions.enabled": true,
-  "gitlens.advanced.messages": {
-    "suppressCreatePullRequestPrompt": true
-  },
   "gitlens.autolinks": [
     {
       "prefix": "#",
@@ -229,19 +222,18 @@
     }
   },
   "gitlens.showWelcomeOnInstall": false,
-  "gitlens.views.branches.showRemoteBranches": true,
   "gitlens.views.commits.files.layout": "tree",
   "gitlens.views.scm.grouped.views": {
-    "branches": false,
     "commits": false,
-    "contributors": false,
-    "launchpad": false,
+    "branches": false,
     "remotes": false,
-    "repositories": false,
-    "searchAndCompare": false,
     "stashes": false,
     "tags": false,
-    "worktrees": false
+    "worktrees": false,
+    "contributors": false,
+    "repositories": false,
+    "searchAndCompare": false,
+    "launchpad": false
   },
   "gitlens.views.stashes.files.layout": "tree",
   "go.coverageDecorator": {
@@ -260,7 +252,6 @@
   "javascript.preferGoToSourceDefinition": true,
   "javascript.suggest.completeFunctionCalls": true,
   "js/ts.implicitProjectConfig.target": "ESNext",
-  // "json.format.keepLines": true,
   "json.format.keepLines": false,
   "markdown-pdf.displayHeaderFooter": false,
   "markdown-pdf.format": "Letter",
@@ -292,7 +283,7 @@
     "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
   ],
   "print.folder.fileNames": true,
-  "print.folder.include": [],
+  "print.folder.include": [ ],
   "print.folder.includeFileList": false,
   "print.folder.maxFiles": 30,
   "print.folder.maxLines": 1200,
@@ -364,14 +355,13 @@
   "terminal.integrated.drawBoldTextInBrightColors": false,
   "terminal.integrated.enableMultiLinePasteWarning": false,
   "terminal.integrated.enableVisualBell": true,
-  "terminal.integrated.fontFamily": "Hack Nerd Font Mono",
   "terminal.integrated.fontSize": 16,
   "terminal.integrated.gpuAcceleration": "on",
   "terminal.integrated.hideOnStartup": "whenEmpty",
   "terminal.integrated.mouseWheelZoom": true,
   "terminal.integrated.profiles.windows": {
     "Command Prompt": {
-      "args": [],
+      "args": [ ],
       "icon": "terminal-cmd",
       "path": [
         "${env:windir}\\Sysnative\\cmd.exe",
@@ -703,12 +693,42 @@
     "workbench.quickOpen.preserveInput",
     "workbench.settings.applyToAllProfiles",
     "workbench.startupEditor",
-    "yaml.schemas"
+    "yaml.schemas",
+    "prettier.useEditorConfig"
   ],
   "workbench.startupEditor": "welcomePageInEmptyWorkbench",
   "workbench.tree.enableStickyScroll": true,
   "workbench.tree.renderIndentGuides": "always",
   "yaml.schemas": {
     "file:///c%3A/Users/duncanbeard/.vscode/extensions/docsmsft.docs-yaml-1.0.5/dist/toc.schema.json": "/toc\\.yml/i"
-  }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "gitlens.showWhatsNewAfterUpgrades": false,
+  "gitlens.plusFeatures.enabled": false,
+  "gitlens.virtualRepositories.enabled": false,
+  "gitlens.telemetry.enabled": false,
+  "github.copilot.chat.newWorkspaceCreation.enabled": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "github.copilot.chat.edits.temporalContext.enabled": true,
+  "github.copilot.chat.search.semanticTextResults": true,
+  "github.copilot.chat.generateTests.codeLens": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "workbench.iconTheme": "vscode-icons",
+  "chat.agent.enabled": true,
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "editor.formatOnPaste": true,
+  "json.format.keepLines": true,
+  "@azure.argTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
+  "markdown.allAvailableLanguages": true,
+  "markdown.replaceSmartQuotes": true,
+  "markdown.preview.breaks": true,
+  "gitlens.views.branches.files.compact": false,
+  "git.blame.editorDecoration.enabled": true,
+  "editor.fontSize": 16
 }
