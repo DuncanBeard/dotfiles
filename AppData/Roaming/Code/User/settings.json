@@ -159,7 +159,6 @@
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
   "git.autoStash": true,
-  "git.branchPrefix": "duncanbeard/",
   "git.closeDiffOnOperation": true,
   "git.confirmSync": false,
   "git.countBadge": "tracked",
@@ -181,7 +180,6 @@
   "github.copilot-labs.showBrushesLenses": true,
   "github.copilot-labs.showTestGenerationLenses": true,
   "github.copilot.advanced": { },
-  "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.enable": {
     "*": true,
     "markdown": true,
@@ -254,6 +252,7 @@
   "javascript.preferGoToSourceDefinition": true,
   "javascript.suggest.completeFunctionCalls": true,
   "js/ts.implicitProjectConfig.target": "ESNext",
+  "json.format.keepLines": false,
   "markdown-pdf.displayHeaderFooter": false,
   "markdown-pdf.format": "Letter",
   "markdown-pdf.margin.bottom": "1in",
@@ -449,6 +448,7 @@
   "workbench.editorAssociations": {
     "*.ipynb": "jupyter-notebook"
   },
+  "workbench.iconTheme": "vscode-icons",
   "workbench.list.mouseWheelScrollSensitivity": 0.5,
   "workbench.list.smoothScrolling": true,
   "workbench.preferredDarkColorTheme": "Monokai",
