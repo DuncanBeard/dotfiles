@@ -23,17 +23,17 @@ blocks:
     background: "#ef5350"
     type: root
     style: diamond
-  - properties:
+      - type: path
+        style: powerline
+        powerline_symbol: 
+        foreground: "#2d3436"
+        background: "#FF9248"
+        properties:
       cache_duration: none
       folder_icon: " \uf07b "
       home_icon: 
       style: folder
-    template: " \uf07b\uea9c {{ .Path }} "
-    foreground: "#2d3436"
-    powerline_symbol: 
-    background: "#FF9248"
-    type: path
-    style: powerline
+        template: " \uf07b {{ if regexMatch \"^[A-Za-z]:\" .PWD }}[{{ regexFind \"^[A-Za-z]:\" .PWD }}] {{ end }}\uea9c {{ .Path }} "
   - properties:
       branch_icon: "\ue725 "
       cache_duration: none
