@@ -5,95 +5,95 @@ transient_prompt:
   foreground: "#e0f8ff"
   newline: true
 blocks:
-- type: prompt
-  alignment: left
-  segments:
-  - properties:
-      cache_duration: none
-    leading_diamond: 
-    template: "\uf120 {{ .Name }} "
-    foreground: "#ffffff"
-    background: "#0077c2"
-    type: shell
-    style: diamond
-  - properties:
-      cache_duration: none
-    template: "<parentBackground>\ue0b0</> \uf292 "
-    foreground: "#FFFB38"
-    background: "#ef5350"
-    type: root
-    style: diamond
+  - type: prompt
+    alignment: left
+    segments:
+      - properties:
+          cache_duration: none
+        leading_diamond: 
+        template: "\uf120 {{ .Name }} "
+        foreground: "#ffffff"
+        background: "#0077c2"
+        type: shell
+        style: diamond
+      - properties:
+          cache_duration: none
+        template: "<parentBackground>\ue0b0</> \uf292 "
+        foreground: "#FFFB38"
+        background: "#ef5350"
+        type: root
+        style: diamond
       - type: path
         style: powerline
         powerline_symbol: 
         foreground: "#2d3436"
         background: "#FF9248"
         properties:
-      cache_duration: none
-      folder_icon: " \uf07b "
-      home_icon: 
-      style: folder
+          cache_duration: none
+          folder_icon: " \uf07b "
+          home_icon: 
+          style: folder
         template: " \uf07b {{ if regexMatch \"^[A-Za-z]:\" .PWD }}[{{ regexFind \"^[A-Za-z]:\" .PWD }}] {{ end }}\uea9c {{ .Path }} "
+      - properties:
+          branch_icon: "\ue725 "
+          cache_duration: none
+          fetch_status: true
+          fetch_upstream_icon: true
+        template: " {{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}<#ef5350> \uf046 {{ .Staging.String }}</>{{ end }} "
+        foreground: "#011627"
+        powerline_symbol: 
+        background: "#FFFB38"
+        type: git
+        style: powerline
+        background_templates:
+          - "{{ if or (.Working.Changed) (.Staging.Changed) }}#ffeb95{{ end }}"
+          - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#c5e478{{ end }}"
+          - "{{ if gt .Ahead 0 }}#C792EA{{ end }}"
+          - "{{ if gt .Behind 0 }}#C792EA{{ end }}"
+      - properties:
+          cache_duration: none
+          style: austin
+          threshold: 250
+        alias: executiontime
+        trailing_diamond: 
+        template: " \ueba2 {{ .FormattedMs }}⠀"
+        foreground: "#ffffff"
+        background: "#83769c"
+        type: executiontime
+        style: diamond
+  - type: prompt
+    alignment: left
+    segments:
+      - properties:
+          always_enabled: true
+          cache_duration: none
+        template: "\ue285\ueab6 "
+        foreground: "#e0f8ff"
+        type: status
+        style: plain
+        foreground_templates:
+          - "{{ if gt .Code 0 }}#ef5350{{ end }}"
+    newline: true
+tooltips:
   - properties:
-      branch_icon: "\ue725 "
-      cache_duration: none
       fetch_status: true
       fetch_upstream_icon: true
-    template: " {{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}<#ef5350> \uf046 {{ .Staging.String }}</>{{ end }} "
-    foreground: "#011627"
-    powerline_symbol: 
-    background: "#FFFB38"
-    type: git
-    style: powerline
-    background_templates:
-    - "{{ if or (.Working.Changed) (.Staging.Changed) }}#ffeb95{{ end }}"
-    - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#c5e478{{ end }}"
-    - "{{ if gt .Ahead 0 }}#C792EA{{ end }}"
-    - "{{ if gt .Behind 0 }}#C792EA{{ end }}"
-  - properties:
-      cache_duration: none
-      style: austin
-      threshold: 250
-    alias: executiontime
+    leading_diamond: 
     trailing_diamond: 
-    template: " \ueba2 {{ .FormattedMs }}⠀"
-    foreground: "#ffffff"
-    background: "#83769c"
-    type: executiontime
+    template: "{{ .HEAD }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end  }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if  .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}"
+    foreground: "#193549"
+    background: "#fffb38"
+    type: git
     style: diamond
-- type: prompt
-  alignment: left
-  segments:
-  - properties:
-      always_enabled: true
-      cache_duration: none
-    template: "\ue285\ueab6 "
-    foreground: "#e0f8ff"
-    type: status
-    style: plain
-    foreground_templates:
-    - "{{ if gt .Code 0 }}#ef5350{{ end }}"
-  newline: true
-tooltips:
-- properties:
-    fetch_status: true
-    fetch_upstream_icon: true
-  leading_diamond: 
-  trailing_diamond: 
-  template: "{{ .HEAD }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end  }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if  .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}"
-  foreground: "#193549"
-  background: "#fffb38"
-  type: git
-  style: diamond
-  tips:
-  - git
-- leading_diamond: 
-  trailing_diamond: 
-  template:  {{ .Name }}
-  foreground: "#b4f9f8"
-  background: "#fffb38"
-  type: az
-  style: diamond
-  tips:
-  - az
+    tips:
+      - git
+  - leading_diamond: 
+    trailing_diamond: 
+    template:  {{ .Name }}
+    foreground: "#b4f9f8"
+    background: "#fffb38"
+    type: az
+    style: diamond
+    tips:
+      - az
 version: 3
