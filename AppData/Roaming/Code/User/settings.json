@@ -1,10 +1,5 @@
 {
-  "[arm-template]": {
-    "sortJSON.orderOverride": [ ] // This setting cannot be applied because it is not registered as language override setting. :(
-  },
   "[azure-pipelines]": {
-    "editor.autoIndent": "full",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.insertSpaces": true,
     "editor.quickSuggestions": {
       "comments": false,
@@ -21,6 +16,9 @@
   },
   "[csharp]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
@@ -41,7 +39,17 @@
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
   },
+  "[yaml]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "files.trimTrailingWhitespace": false
+  },
+  "@azure.argTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "aks.selectedSubscriptions": [
+    "72f988bf-86f1-41af-91ab-2d7cd011db47/bbea1c68-4c8d-4a1d-abf4-4e89ad6d4466"
+  ],
   "appService.showSavePrompt": false,
+  "azure-pipelines.1ESPipelineTemplatesSchemaFile": true,
   "azure.resourceFilter": [
     "72f988bf-86f1-41af-91ab-2d7cd011db47/07bc6e15-9c39-427a-be7e-0f8cfcb9b57c",
     "72f988bf-86f1-41af-91ab-2d7cd011db47/7c8a12b8-ed3e-4b03-b374-82d4c86f0b03"
@@ -52,12 +60,31 @@
   "azureResourceManagerTools.parameterFiles": {
     "c:\\users\\duncanbeard\\source\\repos\\engsys-health-brokerservice\\src\\ev2deployment\\template\\sharedresources.json": "..\\parameters\\sharedresources.parameters.json"
   },
-  "bicep.enableSurveys": false,
-  "blockman.n04ColorComboPreset": "Satura (Gradients)",
-  "bookmarks.saveBookmarksInProject": true,
-  "bookmarks.sideBar.expanded": true,
-  "bookmarks.useWorkaroundForFormatters": true,
+  "chat.agent.enabled": true,
+  "chat.agentSessionsViewLocation": "view",
+  "chat.checkpoints.showFileChanges": true,
   "chat.editor.wordWrap": "on",
+  "chat.math.enabled": true,
+  "chat.mcp.assisted.nuget.enabled": true,
+  "chat.renderRelatedFiles": true,
+  "chat.todoListTool.enabled": true,
+  "chat.tools.autoApprove": true,
+  "chat.tools.terminal.autoApprove": {
+    "/^git\\s+diff\\b/i": true,
+    "/^git\\s+ls-files\\b/i": true,
+    "/^git\\s+status\\b/i": true,
+    "/^Remove-Item\\b/i": false,
+    "bicep": true,
+    "chmod": false,
+    "chown": false,
+    "curl": false,
+    "del": false,
+    "eval": false,
+    "kill": false,
+    "rm": false,
+    "rmdir": false,
+    "wget": false
+  },
   "csharp.preview.improvedLaunchExperience": true,
   "debug.confirmOnExit": "always",
   "debug.console.acceptSuggestionOnEnter": "on",
@@ -73,13 +100,15 @@
   "diffEditor.maxComputationTime": 0,
   "diffEditor.maxFileSize": 0,
   "diffEditor.renderSideBySide": true,
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
   "diffEditor.wordWrap": "on",
   "dotnetAcquisitionExtension.enableTelemetry": false,
   "dotnetAcquisitionExtension.installTimeoutValue": 30,
   "editor.accessibilitySupport": "off",
   "editor.autoIndent": "full",
+  "editor.autoIndentOnPaste": true,
   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "editor.codeActionsOnSave": { },
+  "editor.codeActionsOnSave": {},
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorSurroundingLines": 5,
@@ -88,21 +117,23 @@
   "editor.experimental.pasteActions.enabled": true,
   "editor.find.seedSearchStringFromSelection": "selection",
   "editor.foldingImportsByDefault": false,
-  "editor.fontFamily": "Hack Nerd Font, FiraCode Nerd Font, Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "Hack Nerd Font Mono, FiraCode Nerd Font Mono, Consolas, 'Courier New', monospace",
   "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "editor.formatOnType": true,
+  "editor.formatOnType": false,
   "editor.guides.bracketPairs": false,
   "editor.guides.indentation": false,
   "editor.indentSize": "tabSize",
   "editor.inlayHints.enabled": "off",
   "editor.inlineSuggest.enabled": true,
   "editor.largeFileOptimizations": true,
-  "editor.lineHeight": 1.5,
+  "editor.lineHeight": 1.3,
   "editor.linkedEditing": true,
-  "editor.minimap.autohide": true,
   "editor.minimap.maxColumn": 120,
   "editor.minimap.scale": 1,
+  "editor.minimap.showSlider": "always",
   "editor.mouseWheelZoom": true,
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.padding.top": 10,
@@ -121,6 +152,7 @@
   "editor.smoothScrolling": false,
   "editor.stablePeek": false,
   "editor.stickyScroll.enabled": true,
+  "editor.stickyScroll.maxLineCount": 5,
   "editor.stickyTabStops": true,
   "editor.suggest.localityBonus": true,
   "editor.suggest.matchOnWordStartOnly": false,
@@ -159,10 +191,13 @@
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
   "git.autoStash": true,
+  "git.blame.editorDecoration.enabled": true,
+  "git.branchPrefix": "duncanbeard/",
   "git.closeDiffOnOperation": true,
   "git.confirmSync": false,
   "git.countBadge": "tracked",
   "git.detectSubmodulesLimit": 100,
+  "git.enableCommitSigning": false,
   "git.enableSmartCommit": true,
   "git.fetchOnPull": true,
   "git.ignoreRebaseWarning": true,
@@ -176,12 +211,35 @@
   "git.timeline.showUncommitted": true,
   "git.untrackedChanges": "separate",
   "git.useCommitInputAsStashMessage": true,
-  "github.copilot-labs.advanced": { },
+  "git.verboseCommit": true,
+  "github.copilot-labs.advanced": {},
   "github.copilot-labs.showBrushesLenses": true,
   "github.copilot-labs.showTestGenerationLenses": true,
-  "github.copilot.advanced": { },
+  "github.copilot.advanced": {},
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Look at all files changes and break the changes into one-line descriptions of each thing changed. Break these descriptions with a newline. You don't need to add a '.' after each part. Commit messages can be a bit snarky when appropriate."
+    }
+  ],
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "github.copilot.chat.edits.temporalContext.enabled": true,
+  "github.copilot.chat.enableRetryAfterFilteredResponse": true,
+  "github.copilot.chat.generateTests.codeLens": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "github.copilot.chat.newWorkspaceCreation.enabled": true,
+  "github.copilot.chat.notebook.followCellExecution.enabled": true,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.search.semanticTextResults": false,
+  "github.copilot.chat.terminalChatLocation": "terminal",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.editor.enableCodeActions": false, // This breaks the fast, built-in fixes when enabled
   "github.copilot.enable": {
     "*": true,
+    "jsonc": true,
     "markdown": true,
     "plaintext": true,
     "scminput": false,
@@ -210,32 +268,28 @@
       "hovers": true,
       "name": "Review",
       "statusBarItemName": "Reviewing"
-    },
-    "zen": {
-      "codeLens": false,
-      "currentLine": false,
-      "description": "for a zen-like experience, disables many visual features",
-      "hovers": false,
-      "name": "Zen",
-      "statusBar": false,
-      "statusBarItemName": "Zen"
     }
   },
+  "gitlens.plusFeatures.enabled": false,
   "gitlens.showWelcomeOnInstall": false,
+  "gitlens.showWhatsNewAfterUpgrades": false,
+  "gitlens.telemetry.enabled": false,
+  "gitlens.views.branches.files.compact": false,
   "gitlens.views.commits.files.layout": "tree",
   "gitlens.views.scm.grouped.views": {
-    "commits": false,
     "branches": false,
-    "remotes": false,
-    "stashes": false,
-    "tags": false,
-    "worktrees": false,
+    "commits": false,
     "contributors": false,
+    "launchpad": false,
+    "remotes": false,
     "repositories": false,
     "searchAndCompare": false,
-    "launchpad": false
+    "stashes": false,
+    "tags": false,
+    "worktrees": false
   },
   "gitlens.views.stashes.files.layout": "tree",
+  "gitlens.virtualRepositories.enabled": false,
   "go.coverageDecorator": {
     "coveredGutterStyle": "blockgreen",
     "coveredHighlightColor": "rgba(64,128,128,0.5)",
@@ -247,23 +301,32 @@
   "go.coverOnSave": true,
   "go.coverOnSingleTest": true,
   "go.toolsManagement.autoUpdate": true,
+  "inlineChat.enableV2": true,
   "inlineChat.experimental.textButtons": true,
+  "inlineChat.finishOnType": true,
+  "inlineChat.hideOnRequest": true,
+  "inlineChat.lineEmptyHint": true,
+  "inlineChat.notebookAgent": true,
+  "javascript.format.enable": false,
   "javascript.inlayHints.enumMemberValues.enabled": true,
   "javascript.preferGoToSourceDefinition": true,
   "javascript.suggest.completeFunctionCalls": true,
   "js/ts.implicitProjectConfig.target": "ESNext",
-  "json.format.keepLines": false,
+  "json.format.keepLines": true,
   "markdown-pdf.displayHeaderFooter": false,
   "markdown-pdf.format": "Letter",
   "markdown-pdf.margin.bottom": "1in",
   "markdown-pdf.margin.right": "1in",
   "markdown-pdf.margin.top": "1in",
+  "markdown.allAvailableLanguages": true,
   "markdown.extension.print.imgToBase64": true,
   "markdown.extension.tableFormatter.normalizeIndentation": true,
   "markdown.occurrencesHighlight.enabled": true,
-  "markdown.preview.fontSize": 12,
+  "markdown.preview.breaks": true,
+  "markdown.preview.fontSize": 14,
   "markdown.preview.lineHeight": 1.5,
   "markdown.preview.typographer": true,
+  "markdown.replaceSmartQuotes": true,
   "markdown.validate.enabled": true,
   "merge-conflict.decorators.enabled": true,
   "notebook.output.wordWrap": true,
@@ -280,10 +343,10 @@
     "{bin,obj,out}",
     "node_modules",
     "data",
-    "**/*.{bin,exe,dll,hex,pdb,pdf,pfx,png,jpg,gif,bmp,suo,design}"
+    "**/*.{bin,exe,dll,hex,pdb,pfx,png,jpg,gif,bmp,suo,design}"
   ],
   "print.folder.fileNames": true,
-  "print.folder.include": [ ],
+  "print.folder.include": [],
   "print.folder.includeFileList": false,
   "print.folder.maxFiles": 30,
   "print.folder.maxLines": 1200,
@@ -295,7 +358,35 @@
     "skipper.local": "linux"
   },
   "remoteHub.commitDirectlyWarning": "off",
+  "roo-cline.allowedCommands": [
+    "git log",
+    "git diff",
+    "git show",
+    "git status",
+    "pwsh -Command \"Invoke-Pester",
+    "pwsh -Command \"Import-Module",
+    "go test",
+    "go build",
+    "bicep build",
+    "az bicep build",
+    "go run",
+    "go mod",
+    "git ls-files",
+    "powershell -File",
+    "git check-ignore",
+    "grep \"^ M\"",
+    "docker build",
+    "powershell",
+    "az",
+    "npm test",
+    "npm install",
+    "tsc"
+  ],
+  "roo-cline.deniedCommands": [],
+  "roo-cline.enableCodeActions": false, // This breaks the fast, built-in fixes when enabled
+  "roo-cline.preventCompletionWithOpenTodos": true,
   "scm.autoReveal": true,
+  "scm.compactFolders": false,
   "scm.defaultViewMode": "tree",
   "scm.diffDecorationsGutterPattern": {
     "added": true
@@ -303,8 +394,10 @@
   "scm.diffDecorationsIgnoreTrimWhitespace": "true",
   "scm.experimental.showHistoryGraph": true,
   "scm.inputFontFamily": "editor",
-  "scm.inputFontSize": 12,
+  "scm.inputFontSize": 14,
   "search.defaultViewMode": "tree",
+  "search.searchView.keywordSuggestions": true,
+  "search.searchView.semanticSearchBehavior": "runOnEmpty",
   "search.showLineNumbers": true,
   "search.smartCase": false,
   "search.useGlobalIgnoreFiles": true,
@@ -326,16 +419,6 @@
     "workbench.editor.scrollToSwitchTabs",
     "-window.zoomLevel"
   ],
-  "sortJSON.orderOverride": [
-    "$schema",
-    "contentVersion",
-    "parameters",
-    "name",
-    "settings"
-  ],
-  "sortJSON.orderUnderride": [
-    "geographies"
-  ],
   "task.problemMatchers.neverPrompt": false,
   "telemetry.telemetryLevel": "off",
   "terminal.external.osxExec": "iTerm2.app",
@@ -355,13 +438,15 @@
   "terminal.integrated.drawBoldTextInBrightColors": false,
   "terminal.integrated.enableMultiLinePasteWarning": false,
   "terminal.integrated.enableVisualBell": true,
-  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.fontLigatures.featureSettings": "",
+  "terminal.integrated.fontSize": 14,
   "terminal.integrated.gpuAcceleration": "on",
   "terminal.integrated.hideOnStartup": "whenEmpty",
   "terminal.integrated.mouseWheelZoom": true,
   "terminal.integrated.profiles.windows": {
     "Command Prompt": {
-      "args": [ ],
+      "args": [],
       "icon": "terminal-cmd",
       "path": [
         "${env:windir}\\Sysnative\\cmd.exe",
@@ -378,6 +463,7 @@
     }
   },
   "terminal.integrated.scrollback": 999999,
+  "terminal.integrated.shellIntegration.environmentReporting": true,
   "terminal.integrated.shellIntegration.history": 9001,
   "terminal.integrated.smoothScrolling": true,
   "terminal.integrated.stickyScroll.enabled": true,
@@ -415,6 +501,7 @@
   "window.commandCenter": true,
   "window.newWindowProfile": "Default",
   "window.title": "${rootName}${separator}${activeEditorShort}${separator}$${folderPath}",
+  "window.zoomLevel": 0.5,
   "window.zoomPerWindow": false,
   "workbench.colorCustomizations": {
     "[Codesong]": {
@@ -454,6 +541,7 @@
   "workbench.preferredDarkColorTheme": "Monokai",
   "workbench.preferredLightColorTheme": "Monokai",
   "workbench.quickOpen.preserveInput": true,
+  "workbench.secondarySideBar.showLabels": true,
   "workbench.settings.applyToAllProfiles": [
     "appService.showSavePrompt",
     "azure.resourceFilter",
@@ -696,39 +784,11 @@
     "yaml.schemas",
     "prettier.useEditorConfig"
   ],
+  "workbench.settings.showAISearchToggle": true,
   "workbench.startupEditor": "welcomePageInEmptyWorkbench",
   "workbench.tree.enableStickyScroll": true,
   "workbench.tree.renderIndentGuides": "always",
   "yaml.schemas": {
     "file:///c%3A/Users/duncanbeard/.vscode/extensions/docsmsft.docs-yaml-1.0.5/dist/toc.schema.json": "/toc\\.yml/i"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "gitlens.showWhatsNewAfterUpgrades": false,
-  "gitlens.plusFeatures.enabled": false,
-  "gitlens.virtualRepositories.enabled": false,
-  "gitlens.telemetry.enabled": false,
-  "github.copilot.chat.newWorkspaceCreation.enabled": true,
-  "github.copilot.chat.codesearch.enabled": true,
-  "github.copilot.chat.editor.temporalContext.enabled": true,
-  "github.copilot.chat.edits.temporalContext.enabled": true,
-  "github.copilot.chat.search.semanticTextResults": true,
-  "github.copilot.chat.generateTests.codeLens": true,
-  "github.copilot.chat.languageContext.typescript.enabled": true,
-  "workbench.iconTheme": "vscode-icons",
-  "chat.agent.enabled": true,
-  "github.copilot.chat.agent.thinkingTool": true,
-  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  "editor.formatOnPaste": true,
-  "json.format.keepLines": true,
-  "@azure.argTenant": "72f988bf-86f1-41af-91ab-2d7cd011db47",
-  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
-  "markdown.allAvailableLanguages": true,
-  "markdown.replaceSmartQuotes": true,
-  "markdown.preview.breaks": true,
-  "gitlens.views.branches.files.compact": false,
-  "git.blame.editorDecoration.enabled": true,
-  "editor.fontSize": 16
+  }
 }
