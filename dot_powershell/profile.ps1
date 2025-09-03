@@ -14,11 +14,4 @@ Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # Set-PSReadlineKeyHandler -Key Tab -Function AcceptSuggestion
-
-Set-PSReadLineOption -HistorySavePath 'C:\Users\duncanbeard\OneDrive - Microsoft\Documents\PowerShell\history.txt'
-
-#GitHub CoPilot CLI
-$ghcopilotpath = "$HOME\gh-copilot.ps1"
-if (Test-Path $ghcopilotpath) {
-  . $ghcopilotpath
-}
+Set-PSReadLineOption -HistorySavePath 'C:\Users\duncanbeard\OneDrive - Microsoft\PowerShell\history.txt'
