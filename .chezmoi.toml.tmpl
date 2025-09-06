@@ -5,7 +5,16 @@
     
 [edit]
     command = "code"
+    
+[diff]
+command = "code"
+args = ["--wait", "--diff", "{{ .Destination }}", "{{ .Target }}"]
 
 [merge]
-    command = "pwsh"
-    args = ["-Command", "cp {{ `{{ .Target }}` }} {{ `{{ .Target }}` }}.base && code --wait --new-window --merge {{ `{{ .Destination }}` }} {{ `{{ .Target  }}` }} {{ `{{ .Target }}` }}.base {{ `{{ .Source }}` }}"]
+{{ if eq .chezmoi.os "darwin" -}}
+command = "bash"
+args = [
+    "-c",
+    "cp {{ .Target }} {{ .Target }}.base && code --new-window --wait --merge {{ .Destination }} {{ .Target }} {{ .Target }}.base {{ .Source }}",
+]
+{{ end -}}
