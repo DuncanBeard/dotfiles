@@ -1,0 +1,174 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "ctrl+tab",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+shift+tab",
+    "command": "workbench.action.previousEditor"
+  },
+  {
+    "key": "ctrl+pagedown",
+    "command": "workbench.action.openNextRecentlyUsedEditorInGroup"
+  },
+  {
+    "key": "ctrl+pageup",
+    "command": "workbench.action.openPreviousRecentlyUsedEditorInGroup"
+  },
+  {
+    "key": "shift+alt+t",
+    "command": "workbench.action.tasks.runTask"
+  },
+  {
+    "key": "ctrl+alt+w",
+    "command": "workbench.action.terminal.kill"
+  },
+  {
+    "key": "ctrl+shift+/",
+    "command": "editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+alt+a",
+    "command": "-editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+f4",
+    "command": "workbench.action.terminal.killAll"
+  },
+  {
+    "key": "ctrl+shift+alt+right",
+    "command": "-cursorColumnSelectRight",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+left",
+    "command": "-cursorColumnSelectLeft",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+left",
+    "command": "workbench.action.splitEditorToLeftGroup"
+  },
+  {
+    "key": "ctrl+shift+alt+right",
+    "command": "workbench.action.splitEditorToRightGroup"
+  },
+  {
+    "key": "ctrl+shift+alt+,",
+    "command": "workbench.action.openWorkspaceSettingsFile"
+  },
+  {
+    "key": "ctrl+shift+,",
+    "command": "-editor.action.inPlaceReplace.up",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+,",
+    "command": "workbench.action.openSettingsJson"
+  },
+  {
+    "key": "ctrl+alt+b",
+    "command": "workbench.action.toggleAuxiliaryBar"
+  },
+  {
+    "key": "ctrl+shift+alt+d",
+    "command": "workbench.action.debug.callStackTop"
+  },
+  {
+    "key": "ctrl+alt+,",
+    "command": "workbench.action.openWorkspaceSettings"
+  },
+  {
+    "key": "alt+q",
+    "command": "workbench.files.action.collapseExplorerFolders"
+  },
+  {
+    "key": "alt+q",
+    "command": "search.action.collapseSearchResults"
+  },
+  {
+    "key": "ctrl+k shift+g",
+    "command": "github.copilot.interactiveEditor.generate"
+  },
+  {
+    "key": "f12",
+    "command": "editor.action.revealDefinition",
+    "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+  },
+  {
+    "key": "f12",
+    "command": "-editor.action.revealDefinition",
+    "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "workbench.action.terminal.split",
+    "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
+  },
+  {
+    "key": "ctrl+shift+5",
+    "command": "-workbench.action.terminal.split",
+    "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "workbench.action.terminal.splitInstance",
+    "when": "terminalProcessSupported && terminalTabsFocus"
+  },
+  {
+    "key": "ctrl+shift+5",
+    "command": "-workbench.action.terminal.splitInstance",
+    "when": "terminalProcessSupported && terminalTabsFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+`",
+    "command": "workbench.action.createTerminalEditor",
+    "when": "terminalProcessSupported"
+  },
+  {
+    "key": "ctrl+k ctrl+alt+l",
+    "command": "workbench.action.toggleEditorGroupLock"
+  },
+  {
+    "key": "ctrl+shift+alt+a",
+    "command": "editor.action.codeAction",
+    "args": {
+      "kind": "source.fixAll.sortJSON"
+    }
+  },
+  {
+    "key": "ctrl+pagedown",
+    "command": "-workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+pageup",
+    "command": "-workbench.action.previousEditor"
+  },
+  {
+    "key": "ctrl+pagedown",
+    "command": "workbench.action.nextEditorInGroup"
+  },
+  {
+    "key": "ctrl+k ctrl+pagedown",
+    "command": "-workbench.action.nextEditorInGroup"
+  },
+  {
+    "key": "ctrl+pageup",
+    "command": "workbench.action.previousEditorInGroup"
+  },
+  {
+    "key": "ctrl+k ctrl+pageup",
+    "command": "-workbench.action.previousEditorInGroup"
+  },
+  {
+    "key": "ctrl+shift+j",
+    "command": "workbench.action.toggleMaximizedPanel"
+  },
+  {
+    "key": "ctrl+shift+alt+b",
+    "command": "workbench.action.toggleMaximizedAuxiliaryBar"
+  }
+]
