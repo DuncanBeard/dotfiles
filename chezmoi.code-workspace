@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"json.format.keepLines": false
+		"json.format.keepLines": false,
+		"powershell.cwd": "C:\\Users\\duncanbeard\\.local\\share\\chezmoi"
 	}
 }

@@ -1,40 +1,40 @@
 packages:
   darwin:
     brews:
-    - 'git'
+      - "git"
   windows:
     winget:
-    - 7zip.7zip
-    - AgileBits.1Password
-    - AntibodySoftware.WizTree
-    - Docker.DockerDesktop
-    - Dropbox.Dropbox
-    - GeekUninstaller.GeekUninstaller
-    - Git.Git
-    - Greenshot.Greenshot
-    - Insta360.Link.Controller
-    - JanDeDobbeleer.OhMyPosh
-    - Logseq.Logseq
-    - Microsoft.AzureCLI
-    - Microsoft.Edit
-    - Microsoft.Edge
-    - Microsoft.OneDrive
-    - Microsoft.PowerShell
-    - Microsoft.PowerToys
-    - Microsoft.WindowsApp
-    - Microsoft.Teams
-    - Microsoft.Bicep
-    - Microsoft.VisualStudio.2022.Enterprise
-    - Microsoft.VisualStudioCode
-    - Notepad++.Notepad++
-    - twpayne.chezmoi
-    - Helm.Helm
-    - Microsoft.Azure.Kubelogin
-    - Kubernetes.kustomize
+      - 7zip.7zip
+      - AgileBits.1Password
+      - AntibodySoftware.WizTree
+      - Docker.DockerDesktop
+      - Dropbox.Dropbox
+      - Git.Git
+      - Greenshot.Greenshot
+      - Helm.Helm
+      - Insta360.Link.Controller
+      - JanDeDobbeleer.OhMyPosh
+      - Kubernetes.kustomize
+      - Logseq.Logseq
+      - Microsoft.Azure.Kubelogin
+      - Microsoft.AzureCLI
+      - Microsoft.Bicep
+      - Microsoft.Edge
+      - Microsoft.Edit
+      - Microsoft.OneDrive
+      - Microsoft.PowerShell
+      - Microsoft.PowerToys
+      - Microsoft.Teams
+      - Microsoft.VisualStudio.2022.Enterprise
+      - Microsoft.VisualStudioCode
+      - Microsoft.WindowsApp
+      - Microsoft.WindowsTerminal
+      - Notepad++.Notepad++
+      - twpayne.chezmoi
   linux:
     apt:
-    - 'vim'        
+      - "vim"
     apks:
-    - 'git'
-    - 'vim'
-    - 'tmux'
+      - "git"
+      - "vim"
+      - "tmux"
