@@ -2,8 +2,6 @@ packages:
   darwin:
     brews:
     - 'git'
-    casks:
-    - 'arc'
   windows:
     winget:
     - 7zip.7zip
@@ -11,36 +9,31 @@ packages:
     - AntibodySoftware.WizTree
     - Docker.DockerDesktop
     - Dropbox.Dropbox
-    - Evernote.Evernote
     - GeekUninstaller.GeekUninstaller
     - Git.Git
-    - GitHub.cli
     - Greenshot.Greenshot
-    - Insomnia.Insomnia
     - Insta360.Link.Controller
     - JanDeDobbeleer.OhMyPosh
     - Logseq.Logseq
     - Microsoft.AzureCLI
+    - Microsoft.Edit
     - Microsoft.Edge
     - Microsoft.OneDrive
     - Microsoft.PowerShell
     - Microsoft.PowerToys
-    - Microsoft.RemoteDesktopClient
+    - Microsoft.WindowsApp
     - Microsoft.Teams
     - Microsoft.Bicep
     - Microsoft.VisualStudio.2022.Enterprise
     - Microsoft.VisualStudioCode
-    - Microsoft.WindowsTerminal
     - Notepad++.Notepad++
-    - PrimateLabs.Geekbench.6
-    - REALiX.HWiNFO
-    - TheBrowserCompany.Arc
     - twpayne.chezmoi
-    - WinDirStat.WinDirStat
+    - Helm.Helm
+    - Microsoft.Azure.Kubelogin
+    - Kubernetes.kustomize
   linux:
     apt:
     - 'vim'        
-    - "PrimateLabs.Geekbench.6"
     apks:
     - 'git'
     - 'vim'
