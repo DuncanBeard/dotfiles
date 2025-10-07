@@ -7,7 +7,6 @@ packages:
       - 7zip.7zip
       - AgileBits.1Password
       - AntibodySoftware.WizTree
-      - Docker.DockerDesktop
       - Dropbox.Dropbox
       - Git.Git
       - Greenshot.Greenshot
@@ -15,6 +14,8 @@ packages:
       - Insta360.Link.Controller
       - JanDeDobbeleer.OhMyPosh
       - Kubernetes.kustomize
+      - Kubernetes.kubectl
+      - Derailed.k9s
       - Logseq.Logseq
       - Microsoft.Azure.Kubelogin
       - Microsoft.AzureCLI
