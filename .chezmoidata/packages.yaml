@@ -6,7 +6,6 @@ packages:
     winget:
       - 7zip.7zip
       - AgileBits.1Password
-      - AntibodySoftware.WizTree
       - Dropbox.Dropbox
       - Git.Git
       - Greenshot.Greenshot
@@ -22,15 +21,11 @@ packages:
       - Microsoft.Bicep
       - Microsoft.Edge
       - Microsoft.Edit
-      - Microsoft.OneDrive
       - Microsoft.PowerShell
       - Microsoft.PowerToys
-      - Microsoft.Teams
-      - Microsoft.VisualStudio.2022.Enterprise
       - Microsoft.VisualStudioCode
       - Microsoft.WindowsApp
       - Microsoft.WindowsTerminal
-      - Notepad++.Notepad++
       - twpayne.chezmoi
   linux:
     apt:
