@@ -14,4 +14,4 @@ Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # Set-PSReadlineKeyHandler -Key Tab -Function AcceptSuggestion
-Set-PSReadLineOption -HistorySavePath 'C:\Users\duncanbeard\OneDrive - Microsoft\PowerShell\history.txt'
+Set-PSReadLineOption -HistorySavePath 'C:\Users\duncanbeard\OneDrive\PowerShell\history.txt'
