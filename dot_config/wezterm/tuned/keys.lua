@@ -55,6 +55,18 @@ function M.apply(config, settings)
       end),
     },
   }
+  -- Reserve Ctrl-click for links, including in mouse-aware applications.
+  -- Consume the press too, so applications do not receive an unmatched press.
+  for _, reporting in ipairs { false, true } do
+    table.insert(config.mouse_bindings, {
+      event = { Down = { streak = 1, button = 'Left' } }, mods = 'CTRL',
+      mouse_reporting = reporting, action = act.Nop,
+    })
+    table.insert(config.mouse_bindings, {
+      event = { Up = { streak = 1, button = 'Left' } }, mods = 'CTRL',
+      mouse_reporting = reporting, action = act.OpenLinkAtMouseCursor,
+    })
+  end
   if settings.semantic_bindings then
     -- Article's triple-click selects the command output's semantic zone.
     -- Without shell markers, turn semantic_bindings off for normal line select.
