@@ -1,0 +1,33 @@
+# WSL Hermes overview. Keep agent state visible in the sidebar.
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+auto_switch = false
+[theme.custom]
+accent = "#0078D4"
+active_row_bg = "#0078D4"
+red = "#F05A28"
+yellow = "#FF8C00"
+
+[terminal]
+default_shell = "/bin/bash"
+shell_mode = "login"
+
+[ui]
+sidebar_start_collapsed = false
+sidebar_width = 36
+sidebar_max_width = 48
+agent_panel_sort = "priority"
+status_indicators = "symbols"
+show_agent_labels_on_pane_borders = true
+window_title = "WSL Hermes: {workspace}"
+
+[ui.sidebar.agents]
+row_gap = 1
+rows = [["state_icon", "state_text", "agent"], ["workspace", "tab"], ["terminal_title_stripped"]]
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
