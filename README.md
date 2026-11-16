@@ -19,13 +19,18 @@ before updating configuration files on every `chezmoi apply`.
 Restart existing terminals or VS Code after installing tools or fonts so they
 pick up PATH and font changes.
 
-Validate the bootstrap without installing anything using Pester 5:
+Validate the bootstrap and profile templates without installing anything using Pester 5:
 
 ```powershell
-Invoke-Pester -Path .\tests\windows-bootstrap.Tests.ps1 -Output Detailed
+Invoke-Pester -Path .\tests -Output Detailed
 ```
 
 ## PowerShell profile
+
+The [managed profile](./dot_powershell/profile.ps1.tmpl) saves history under
+`$HOME\OneDrive - Microsoft\PowerShell\history.txt` when the configured email ends
+in `@microsoft.com` (case-insensitive), otherwise under
+`$HOME\OneDrive\PowerShell\history.txt`.
 
 To get PowerShell to use the .posh folder:
 1. `$profile | select *` to get all $profile locations
