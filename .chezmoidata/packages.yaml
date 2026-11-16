@@ -27,6 +27,11 @@ packages:
       - Microsoft.WindowsApp
       - Microsoft.WindowsTerminal
       - twpayne.chezmoi
+    fonts:
+      - name: FiraCode
+        family: FiraCode Nerd Font
+      - name: Hack
+        family: Hack Nerd Font Mono
   linux:
     apt:
       - "vim"

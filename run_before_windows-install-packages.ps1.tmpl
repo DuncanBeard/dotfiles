@@ -1,0 +1,68 @@
+{{ if eq .chezmoi.os "windows" -}}
+$ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $false
+$packageAlreadyInstalled = -1978335135 # APPINSTALLER_CLI_ERROR_PACKAGE_ALREADY_INSTALLED
+
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+  throw 'winget is not installed. Install App Installer before applying this configuration.'
+}
+
+$packageIds = @(
+{{- range .packages.windows.winget }}
+  {{ . | quote }}
+{{- end }}
+)
+
+foreach ($packageId in $packageIds) {
+  Write-Host "Ensuring $packageId is installed"
+  winget install --id $packageId --exact --source winget --no-upgrade --accept-package-agreements --accept-source-agreements --disable-interactivity
+  $exitCode = $LASTEXITCODE
+  if ($exitCode -notin @(0, $packageAlreadyInstalled)) {
+    throw "winget failed to install $packageId with exit code $exitCode."
+  }
+}
+
+# Installers update the registry PATH, not this running process.
+$env:Path = [Environment]::ExpandEnvironmentVariables((@(
+  $env:Path
+  [Environment]::GetEnvironmentVariable('Path', 'Machine')
+  [Environment]::GetEnvironmentVariable('Path', 'User')
+) -join ';'))
+
+if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
+  throw 'oh-my-posh is not available after package installation. Check its installation and PATH.'
+}
+
+Add-Type -AssemblyName System.Drawing
+
+function Get-InstalledFontFamilies {
+  $collection = New-Object -TypeName System.Drawing.Text.InstalledFontCollection
+  try {
+    $collection.Families.Name
+  } finally {
+    $collection.Dispose()
+  }
+}
+
+$fonts = @(
+{{- range .packages.windows.fonts }}
+  @{ Name = {{ .name | quote }}; Family = {{ .family | quote }} }
+{{- end }}
+)
+
+foreach ($font in $fonts) {
+  if ((Get-InstalledFontFamilies) -contains $font.Family) {
+    continue
+  }
+
+  Write-Host "Installing $($font.Name) Nerd Font"
+  oh-my-posh font install $font.Name
+  $exitCode = $LASTEXITCODE
+  if ($exitCode -ne 0) {
+    throw "oh-my-posh failed to install $($font.Name) with exit code $exitCode."
+  }
+  if ((Get-InstalledFontFamilies) -notcontains $font.Family) {
+    throw "Font installation completed, but $($font.Family) is not available."
+  }
+}
+{{ end -}}
