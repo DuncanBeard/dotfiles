@@ -32,6 +32,12 @@ The [managed profile](./dot_powershell/profile.ps1.tmpl) saves history under
 in `@microsoft.com` (case-insensitive), otherwise under
 `$HOME\OneDrive\PowerShell\history.txt`.
 
+On `@microsoft.com` machines the profile also sets `PI_LEGACY_INSTALL=1`. Microsoft's
+npm feed lags pi.dev releases, so Pi's default managed installer fails with 404s;
+legacy mode installs the feed's latest Pi with npm instead. `pi update` targets
+pi.dev's newest release, which the feed may not have yet, so update with
+`npm install -g --ignore-scripts @earendil-works/pi-coding-agent` instead.
+
 To get PowerShell to use the .posh folder:
 1. `$profile | select *` to get all $profile locations
 2. `code "C:\Program Files\PowerShell\7\profile.ps1"` as administrator

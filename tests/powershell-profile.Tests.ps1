@@ -44,3 +44,33 @@ Describe 'PowerShell history location' {
     }
   }
 }
+
+Describe 'Pi installer mode' {
+  It 'sets PI_LEGACY_INSTALL only for <Email>' -ForEach @(
+    @{ Email = 'user@microsoft.com'; Enabled = $true }
+    @{ Email = 'user@MICROSOFT.COM'; Enabled = $true }
+    @{ Email = 'user@outlook.com'; Enabled = $false }
+  ) {
+    $overridePath = Join-Path $TestDrive 'email.json'
+    @{ email = $Email } | ConvertTo-Json | Set-Content -LiteralPath $overridePath
+    $rendered = & chezmoi --source $repositoryRoot --override-data-file $overridePath execute-template --file $templatePath
+    $LASTEXITCODE | Should -Be 0
+
+    $parseErrors = $null
+    $profileAst = [System.Management.Automation.Language.Parser]::ParseInput(
+      ($rendered -join "`n"), [ref]$null, [ref]$parseErrors
+    )
+    $parseErrors | Should -BeNullOrEmpty
+    $assignment = $profileAst.Find({
+      param($node)
+      $node -is [System.Management.Automation.Language.AssignmentStatementAst] -and
+        $node.Left.Extent.Text -eq '$env:PI_LEGACY_INSTALL'
+    }, $true)
+
+    if ($Enabled) {
+      $assignment.Right.Extent.Text | Should -Be '"1"'
+    } else {
+      $assignment | Should -BeNullOrEmpty
+    }
+  }
+}

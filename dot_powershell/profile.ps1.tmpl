@@ -15,3 +15,9 @@ Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # Set-PSReadlineKeyHandler -Key Tab -Function AcceptSuggestion
 Set-PSReadLineOption -HistorySavePath "$HOME\{{ if hasSuffix "@microsoft.com" (lower .email) }}OneDrive - Microsoft{{ else }}OneDrive{{ end }}\PowerShell\history.txt"
+{{- if hasSuffix "@microsoft.com" (lower .email) }}
+
+# Microsoft's npm feed lags pi.dev releases, so Pi's default managed install fails with 404s.
+# Legacy mode installs the feed's latest Pi with npm instead.
+$env:PI_LEGACY_INSTALL = "1"
+{{- end }}
