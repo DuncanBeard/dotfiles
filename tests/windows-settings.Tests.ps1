@@ -28,6 +28,7 @@ namespace ChezmoiWindowsSettings {
   $search = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
   $personalize = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
   $mouse = 'HKCU:\Control Panel\Mouse'
+  $desktopIcons = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel'
 
   $expected = @{
     "$mouse|MouseSpeed" = '0'
@@ -42,6 +43,7 @@ namespace ChezmoiWindowsSettings {
     "$advanced|MMTaskbarGlomLevel" = 2
     "$advanced|ShowTaskViewButton" = 0
     "$search|SearchboxTaskbarMode" = 0
+    "$desktopIcons|{20D04FE0-3AEA-1069-A2D8-08002B30309D}" = 0
     "$personalize|AppsUseLightTheme" = 0
     "$personalize|SystemUsesLightTheme" = 0
     "$personalize|EnableTransparency" = 0
@@ -119,6 +121,15 @@ Describe 'Windows settings' {
     @($script:writes) | Should -Be @("$advanced|TaskbarSize")
     [ChezmoiWindowsSettings.Native]::Calls | Should -Be 0
     $script:explorerStops | Should -Be 1
+  }
+
+  It 'creates the desktop icon key when it does not exist' {
+    Mock Test-Path { $false } -ParameterFilter { $Path -eq $desktopIcons }
+
+    & $settingsScript
+
+    Should -Invoke New-Item -Times 1 -Exactly -ParameterFilter { $Path -eq $desktopIcons }
+    $script:registry["$desktopIcons|{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] | Should -Be 0
   }
 
   It 'does not render Windows settings on <OperatingSystem>' -ForEach @(

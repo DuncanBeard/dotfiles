@@ -5,6 +5,8 @@ $advanced = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $search = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
 $personalize = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
 $mouse = 'HKCU:\Control Panel\Mouse'
+$desktopIcons = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel'
+$thisPC = '{20D04FE0-3AEA-1069-A2D8-08002B30309D}'
 
 $settings = @(
   # Mouse acceleration ("Enhance pointer precision") off
@@ -25,6 +27,9 @@ $settings = @(
   @{ Path = $advanced; Name = 'MMTaskbarGlomLevel'; Value = 2; Type = 'DWord'; Applies = 'Explorer' }
   @{ Path = $advanced; Name = 'ShowTaskViewButton'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
   @{ Path = $search; Name = 'SearchboxTaskbarMode'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+
+  # Desktop: show This PC
+  @{ Path = $desktopIcons; Name = $thisPC; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
 
   # Dark mode, transparency off
   @{ Path = $personalize; Name = 'AppsUseLightTheme'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }

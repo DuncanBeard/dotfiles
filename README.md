@@ -36,6 +36,7 @@ runs after files are applied, and again whenever the script changes. It sets:
 - Taskbar aligned left, small bar (`TaskbarSize`), small buttons
   (`IconSizePreference`), never combined on any display, Task View and search
   hidden.
+- This PC shown on the desktop.
 - Dark mode for apps and Windows, transparency off.
 
 Only values that differ are written. Explorer restarts only when a taskbar or
