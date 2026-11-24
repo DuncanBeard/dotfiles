@@ -11,6 +11,16 @@ $packageIds = @(
 {{- range .packages.windows.winget }}
   {{ . | quote }}
 {{- end }}
+{{- if dig "optionalApps" true . }}
+{{- range .packages.windows.wingetOptional }}
+  {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- if not (hasSuffix "@microsoft.com" (lower .email)) }}
+{{- range .packages.windows.wingetNonMicrosoft }}
+  {{ . | quote }}
+{{- end }}
+{{- end }}
 )
 
 foreach ($packageId in $packageIds) {

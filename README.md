@@ -9,6 +9,13 @@ before updating configuration files on every `chezmoi apply`.
 - Install App Installer (`winget`) first.
 - Missing packages are installed using exact IDs from the `winget` source.
   Existing packages are not upgraded; use `winget upgrade` separately.
+- Packages under `wingetOptional` (Dropbox, Insta360 Link Controller, Logseq,
+  PowerToys) are installed only when `chezmoi init` is answered yes for
+  `optionalApps`. Answering no also stops managing their configuration files.
+  Machines initialized before this prompt existed keep installing them until
+  `chezmoi init` is rerun.
+- Packages under `wingetNonMicrosoft` (Tailscale) are installed only when the
+  configured email does not end in `@microsoft.com` (case-insensitive).
 - WinGet package and source agreements are accepted automatically. Installers
   may still require elevation.
 - After installing Oh My Posh, missing FiraCode and Hack Nerd Fonts are installed

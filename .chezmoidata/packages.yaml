@@ -6,27 +6,32 @@ packages:
     winget:
       - 7zip.7zip
       - AgileBits.1Password
-      - Dropbox.Dropbox
       - Git.Git
       - Greenshot.Greenshot
       - Helm.Helm
-      - Insta360.Link.Controller
       - JanDeDobbeleer.OhMyPosh
       - Kubernetes.kustomize
       - Kubernetes.kubectl
       - Derailed.k9s
-      - Logseq.Logseq
       - Microsoft.Azure.Kubelogin
       - Microsoft.AzureCLI
       - Microsoft.Bicep
       - Microsoft.Edge
       - Microsoft.Edit
       - Microsoft.PowerShell
-      - Microsoft.PowerToys
       - Microsoft.VisualStudioCode
       - Microsoft.WindowsApp
       - Microsoft.WindowsTerminal
       - twpayne.chezmoi
+    # Installed only when the optionalApps prompt is answered true.
+    wingetOptional:
+      - Dropbox.Dropbox
+      - Insta360.Link.Controller
+      - Logseq.Logseq
+      - Microsoft.PowerToys
+    # Installed only when the email is not an @microsoft.com address.
+    wingetNonMicrosoft:
+      - Tailscale.Tailscale
     fonts:
       - name: FiraCode
         family: FiraCode Nerd Font

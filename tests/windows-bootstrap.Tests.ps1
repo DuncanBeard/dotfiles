@@ -1,7 +1,10 @@
 BeforeAll {
   $repositoryRoot = Split-Path -Parent $PSScriptRoot
   $templatePath = Join-Path $repositoryRoot 'run_before_windows-install-packages.ps1.tmpl'
-  $rendered = & chezmoi --source $repositoryRoot execute-template --file $templatePath
+  $bootstrapDataPath = Join-Path $TestDrive 'bootstrap-data.json'
+  @{ email = 'user@example.com'; optionalApps = $true } | ConvertTo-Json |
+    Set-Content -LiteralPath $bootstrapDataPath
+  $rendered = & chezmoi --source $repositoryRoot --override-data-file $bootstrapDataPath execute-template --file $templatePath
   if ($LASTEXITCODE -ne 0) {
     throw 'Unable to render the Windows bootstrap.'
   }
@@ -12,8 +15,30 @@ BeforeAll {
     throw 'Unable to render the Windows package data.'
   }
   $windowsPackages = ($packageData -join "`n") | ConvertFrom-Json
-  $packageIds = @($windowsPackages.winget)
+  $requiredPackageIds = @($windowsPackages.winget)
+  $optionalPackageIds = @($windowsPackages.wingetOptional)
+  $nonMicrosoftPackageIds = @($windowsPackages.wingetNonMicrosoft)
+  $packageIds = @($requiredPackageIds + $optionalPackageIds + $nonMicrosoftPackageIds)
   $fontSpecs = @($windowsPackages.fonts)
+
+  function Get-RenderedPackageIds {
+    param([hashtable]$Data)
+    $overridePath = Join-Path $TestDrive 'gate-data.json'
+    $Data | ConvertTo-Json | Set-Content -LiteralPath $overridePath
+    $output = & chezmoi --source $repositoryRoot --override-data-file $overridePath execute-template --file $templatePath
+    if ($LASTEXITCODE -ne 0) {
+      throw 'Unable to render the Windows bootstrap.'
+    }
+    $ast = [System.Management.Automation.Language.Parser]::ParseInput(
+      ($output -join "`n"), [ref]$null, [ref]$null
+    )
+    $assignment = $ast.Find({
+      param($node)
+      $node -is [System.Management.Automation.Language.AssignmentStatementAst] -and
+        $node.Left.Extent.Text -eq '$packageIds'
+    }, $true)
+    @(& ([scriptblock]::Create($assignment.Right.Extent.Text)))
+  }
 
   function winget { throw 'WinGet must be mocked during tests.' }
   function oh-my-posh { throw 'Oh My Posh must be mocked during tests.' }
@@ -133,5 +158,52 @@ Describe 'Windows prerequisite bootstrap' {
     $output = & chezmoi --source $repositoryRoot --override-data-file $overridePath execute-template --file $templatePath
     $LASTEXITCODE | Should -Be 0
     ($output -join "`n").Trim() | Should -BeNullOrEmpty
+  }
+}
+
+Describe 'Windows package gates' {
+  It 'installs optional apps: <OptionalApps>, non-Microsoft apps for <Email>' -ForEach @(
+    @{ OptionalApps = $true;  Email = 'user@example.com';   ExpectOptional = $true;  ExpectNonMicrosoft = $true }
+    @{ OptionalApps = $false; Email = 'user@example.com';   ExpectOptional = $false; ExpectNonMicrosoft = $true }
+    @{ OptionalApps = $true;  Email = 'user@microsoft.com'; ExpectOptional = $true;  ExpectNonMicrosoft = $false }
+    @{ OptionalApps = $false; Email = 'user@MICROSOFT.COM'; ExpectOptional = $false; ExpectNonMicrosoft = $false }
+    @{ OptionalApps = $false; Email = 'user@microsoft.com.example.org'; ExpectOptional = $false; ExpectNonMicrosoft = $true }
+  ) {
+    $rendered = Get-RenderedPackageIds @{ email = $Email; optionalApps = $OptionalApps }
+
+    $expected = @($requiredPackageIds)
+    if ($ExpectOptional) { $expected += $optionalPackageIds }
+    if ($ExpectNonMicrosoft) { $expected += $nonMicrosoftPackageIds }
+    $rendered | Should -Be $expected
+  }
+
+  It 'keeps installing optional apps when optionalApps has not been set' {
+    $overridePath = Join-Path $TestDrive 'no-gate.json'
+    @{ email = 'user@example.com' } | ConvertTo-Json | Set-Content -LiteralPath $overridePath
+    $configPath = Join-Path $TestDrive 'empty.toml'
+    Set-Content -LiteralPath $configPath -Value ''
+    $output = & chezmoi --source $repositoryRoot --config $configPath --override-data-file $overridePath execute-template --file $templatePath
+    $LASTEXITCODE | Should -Be 0
+    foreach ($id in $optionalPackageIds) {
+      ($output -join "`n") | Should -Match ([regex]::Escape("`"$id`""))
+    }
+  }
+
+  It 'ignores optional app configuration only when optionalApps is false' {
+    $ignorePath = Join-Path $repositoryRoot '.chezmoiignore'
+    foreach ($case in @(@{ Value = $true; Ignored = $false }, @{ Value = $false; Ignored = $true })) {
+      $overridePath = Join-Path $TestDrive 'ignore.json'
+      @{ email = 'user@example.com'; optionalApps = $case.Value } | ConvertTo-Json |
+        Set-Content -LiteralPath $overridePath
+      $output = (& chezmoi --source $repositoryRoot --override-data-file $overridePath execute-template --file $ignorePath) -join "`n"
+      $LASTEXITCODE | Should -Be 0
+      foreach ($pattern in '.config/powertoys', 'AppData/Local/Microsoft/PowerToys', '.logseq') {
+        if ($case.Ignored) {
+          $output | Should -Match "(?m)^$([regex]::Escape($pattern))\r?$"
+        } else {
+          $output | Should -Not -Match "(?m)^$([regex]::Escape($pattern))\r?$"
+        }
+      }
+    }
   }
 }

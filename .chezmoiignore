@@ -21,3 +21,8 @@ AppData
 Library
 **/*.ps1
 {{ end }}
+{{ if not (dig "optionalApps" true .) }}
+.config/powertoys
+AppData/Local/Microsoft/PowerToys
+.logseq
+{{ end }}

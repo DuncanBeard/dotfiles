@@ -1,7 +1,9 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $optionalApps := promptBoolOnce . "optionalApps" "Install optional apps (Dropbox, Insta360 Link Controller, Logseq, PowerToys)" -}}
 
 [data]
     email = {{ $email | quote }}
+    optionalApps = {{ $optionalApps }}
 
 [edit]
     command = "code"
