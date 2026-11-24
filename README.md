@@ -26,6 +26,21 @@ before updating configuration files on every `chezmoi apply`.
 Restart existing terminals or VS Code after installing tools or fonts so they
 pick up PATH and font changes.
 
+## Windows settings
+
+[run_onchange_after_windows-settings.ps1](./run_onchange_after_windows-settings.ps1.tmpl)
+runs after files are applied, and again whenever the script changes. It sets:
+
+- Mouse acceleration (Enhance pointer precision) off, applied immediately.
+- Snap Assist suggestions off; Alt+Tab shows open windows only (no Edge tabs).
+- Taskbar aligned left, small bar (`TaskbarSize`), small buttons
+  (`IconSizePreference`), never combined on any display, Task View and search
+  hidden.
+- Dark mode for apps and Windows, transparency off.
+
+Only values that differ are written. Explorer restarts only when a taskbar or
+theme value changed.
+
 Validate the bootstrap and profile templates without installing anything using Pester 5:
 
 ```powershell

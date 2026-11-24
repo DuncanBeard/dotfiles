@@ -1,0 +1,71 @@
+{{ if eq .chezmoi.os "windows" -}}
+$ErrorActionPreference = 'Stop'
+
+$advanced = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+$search = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
+$personalize = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
+$mouse = 'HKCU:\Control Panel\Mouse'
+
+$settings = @(
+  # Mouse acceleration ("Enhance pointer precision") off
+  @{ Path = $mouse; Name = 'MouseSpeed'; Value = '0'; Type = 'String'; Applies = 'Mouse' }
+  @{ Path = $mouse; Name = 'MouseThreshold1'; Value = '0'; Type = 'String'; Applies = 'Mouse' }
+  @{ Path = $mouse; Name = 'MouseThreshold2'; Value = '0'; Type = 'String'; Applies = 'Mouse' }
+
+  # Snap: don't show what can be snapped next to a window
+  @{ Path = $advanced; Name = 'SnapAssist'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  # Alt+Tab: open windows only, no Edge tabs
+  @{ Path = $advanced; Name = 'MultiTaskingAltTabFilter'; Value = 3; Type = 'DWord'; Applies = 'Explorer' }
+
+  # Taskbar: left aligned, small bar, small buttons, never combine, no Task View or search
+  @{ Path = $advanced; Name = 'TaskbarAl'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $advanced; Name = 'TaskbarSize'; Value = 1; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $advanced; Name = 'IconSizePreference'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $advanced; Name = 'TaskbarGlomLevel'; Value = 2; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $advanced; Name = 'MMTaskbarGlomLevel'; Value = 2; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $advanced; Name = 'ShowTaskViewButton'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $search; Name = 'SearchboxTaskbarMode'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+
+  # Dark mode, transparency off
+  @{ Path = $personalize; Name = 'AppsUseLightTheme'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $personalize; Name = 'SystemUsesLightTheme'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+  @{ Path = $personalize; Name = 'EnableTransparency'; Value = 0; Type = 'DWord'; Applies = 'Explorer' }
+)
+
+$changed = [System.Collections.Generic.HashSet[string]]::new()
+foreach ($setting in $settings) {
+  $current = (Get-ItemProperty -Path $setting.Path -Name $setting.Name -ErrorAction SilentlyContinue).($setting.Name)
+  if ($null -ne $current -and "$current" -eq "$($setting.Value)") {
+    continue
+  }
+  if (-not (Test-Path -Path $setting.Path)) {
+    New-Item -Path $setting.Path -Force | Out-Null
+  }
+  Write-Host "Setting $($setting.Name) to $($setting.Value)"
+  Set-ItemProperty -Path $setting.Path -Name $setting.Name -Value $setting.Value -Type $setting.Type
+  [void]$changed.Add($setting.Applies)
+}
+
+if ($changed.Contains('Mouse')) {
+  if (-not ('ChezmoiWindowsSettings.Native' -as [type])) {
+    Add-Type -Namespace ChezmoiWindowsSettings -Name Native -MemberDefinition @'
+[DllImport("user32.dll", SetLastError = true)]
+public static extern bool SystemParametersInfo(uint action, uint param, int[] values, uint winIni);
+'@
+  }
+  # SPI_SETMOUSE, persisted and broadcast so the change applies without signing out.
+  $mouseValues = [int[]]@(0, 0, 0)
+  if (-not [ChezmoiWindowsSettings.Native]::SystemParametersInfo(0x0004, 0, $mouseValues, 0x03)) {
+    Write-Warning 'Mouse settings were saved but could not be applied until the next sign-in.'
+  }
+}
+
+if ($changed.Contains('Explorer')) {
+  Write-Host 'Restarting Explorer to apply taskbar and theme settings'
+  Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+  Start-Sleep -Seconds 2
+  if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) {
+    Start-Process explorer.exe
+  }
+}
+{{ end -}}
