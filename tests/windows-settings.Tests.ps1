@@ -20,6 +20,22 @@ namespace ChezmoiWindowsSettings {
       return true;
     }
   }
+  public static class Desktop {
+    public static bool Arranged;
+    public static int FailuresBeforeReady;
+    public static int ApplyCalls;
+    public static bool IsAutoArrangedByName() {
+      if (FailuresBeforeReady > 0) {
+        FailuresBeforeReady--;
+        throw new System.InvalidOperationException("The desktop window is not available.");
+      }
+      return Arranged;
+    }
+    public static void AutoArrangeByName() {
+      ApplyCalls++;
+      Arranged = true;
+    }
+  }
 }
 '@
   }
@@ -54,6 +70,9 @@ Describe 'Windows settings' {
   BeforeEach {
     [ChezmoiWindowsSettings.Native]::Calls = 0
     [ChezmoiWindowsSettings.Native]::LastValues = $null
+    [ChezmoiWindowsSettings.Desktop]::Arranged = $true
+    [ChezmoiWindowsSettings.Desktop]::FailuresBeforeReady = 0
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls = 0
     $script:registry = @{}
     $script:writes = [System.Collections.Generic.List[string]]::new()
     $script:explorerStops = 0
@@ -72,6 +91,7 @@ Describe 'Windows settings' {
     Mock Test-Path { $true }
     Mock New-Item {}
     Mock Write-Host {}
+    Mock Write-Warning {}
     Mock Start-Sleep {}
     Mock Stop-Process { $script:explorerStops++ } -ParameterFilter { $Name -eq 'explorer' }
     Mock Get-Process { $null } -ParameterFilter { $Name -eq 'explorer' }
@@ -79,6 +99,8 @@ Describe 'Windows settings' {
   }
 
   It 'writes every setting, applies mouse settings, and restarts Explorer on a fresh machine' {
+    [ChezmoiWindowsSettings.Desktop]::Arranged = $false
+
     & $settingsScript
 
     $script:writes.Count | Should -Be $expected.Count
@@ -89,6 +111,7 @@ Describe 'Windows settings' {
     @([ChezmoiWindowsSettings.Native]::LastValues) | Should -Be @(0, 0, 0)
     $script:explorerStops | Should -Be 1
     $script:explorerStarts | Should -Be 1
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls | Should -Be 1
   }
 
   It 'does nothing when every setting is already applied' {
@@ -99,6 +122,7 @@ Describe 'Windows settings' {
     $script:writes.Count | Should -Be 0
     [ChezmoiWindowsSettings.Native]::Calls | Should -Be 0
     $script:explorerStops | Should -Be 0
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls | Should -Be 0
   }
 
   It 'applies mouse settings without restarting Explorer when only the mouse differs' {
@@ -130,6 +154,37 @@ Describe 'Windows settings' {
 
     Should -Invoke New-Item -Times 1 -Exactly -ParameterFilter { $Path -eq $desktopIcons }
     $script:registry["$desktopIcons|{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] | Should -Be 0
+  }
+
+  It 'arranges desktop icons by name without restarting Explorer when only that differs' {
+    foreach ($key in $expected.Keys) { $script:registry[$key] = $expected[$key] }
+    [ChezmoiWindowsSettings.Desktop]::Arranged = $false
+
+    & $settingsScript
+
+    $script:writes.Count | Should -Be 0
+    $script:explorerStops | Should -Be 0
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls | Should -Be 1
+  }
+
+  It 'waits for the desktop after Explorer restarts before arranging icons' {
+    [ChezmoiWindowsSettings.Desktop]::Arranged = $false
+    [ChezmoiWindowsSettings.Desktop]::FailuresBeforeReady = 3
+
+    & $settingsScript
+
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls | Should -Be 1
+    Should -Invoke Start-Sleep -Times 3 -Exactly -ParameterFilter { $Milliseconds -eq 500 }
+    Should -Invoke Write-Warning -Times 0 -Exactly
+  }
+
+  It 'warns instead of failing when the desktop never becomes available' {
+    [ChezmoiWindowsSettings.Desktop]::FailuresBeforeReady = 1000
+
+    { & $settingsScript } | Should -Not -Throw
+
+    [ChezmoiWindowsSettings.Desktop]::ApplyCalls | Should -Be 0
+    Should -Invoke Write-Warning -Times 1 -Exactly -ParameterFilter { $Message -like '*desktop icons were not arranged*' }
   }
 
   It 'does not render Windows settings on <OperatingSystem>' -ForEach @(

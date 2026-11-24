@@ -73,4 +73,122 @@ if ($changed.Contains('Explorer')) {
     Start-Process explorer.exe
   }
 }
+# Desktop: auto arrange icons, sorted by name. Explorer keeps desktop view state in
+# memory and overwrites the registry, so apply it through the live desktop view.
+if (-not ('ChezmoiWindowsSettings.Desktop' -as [type])) {
+  Add-Type -TypeDefinition @'
+using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
+
+namespace ChezmoiWindowsSettings {
+  [ComImport, Guid("6D5140C1-7436-11CE-8034-00AA006009FA"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+  interface IServiceProvider {
+    [return: MarshalAs(UnmanagedType.IUnknown)]
+    object QueryService(ref Guid service, ref Guid riid);
+  }
+
+  [ComImport, Guid("000214E2-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+  interface IShellBrowser {
+    void GetWindow(); void ContextSensitiveHelp(); void InsertMenusSB(); void SetMenuSB(); void RemoveMenusSB();
+    void SetStatusTextSB(); void EnableModelessSB(); void TranslateAcceleratorSB(); void BrowseObject();
+    void GetViewStateStream(); void GetControlWindow(); void SendControlMsg();
+    [return: MarshalAs(UnmanagedType.IUnknown)]
+    object QueryActiveShellView();
+  }
+
+  [ComImport, Guid("000214E3-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+  interface IShellView {
+    void GetWindow(); void ContextSensitiveHelp(); void TranslateAccelerator(); void EnableModeless(); void UIActivate();
+    void Refresh(); void CreateViewWindow(); void DestroyViewWindow(); void GetCurrentInfo(); void AddPropertySheetPages();
+    void SaveViewState();
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  public struct PropertyKey { public Guid FormatId; public uint PropertyId; }
+
+  [StructLayout(LayoutKind.Sequential)]
+  public struct SortColumn { public PropertyKey Key; public int Direction; }
+
+  [ComImport, Guid("1af3a467-214f-4298-908e-06b03e0b39f9"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+  interface IFolderView2 {
+    // IFolderView
+    void GetCurrentViewMode(); void SetCurrentViewMode(); void GetFolder(); void Item(); void ItemCount();
+    void Items(); void GetSelectionMarkedItem(); void GetFocusedItem(); void GetItemPosition(); void GetSpacing();
+    void GetDefaultSpacing();
+    [PreserveSig] int GetAutoArrange();
+    void SelectItem(); void SelectAndPositionItems();
+    // IFolderView2
+    void SetGroupBy(); void GetGroupBy(); void SetViewProperty(); void GetViewProperty();
+    void SetTileViewProperties(); void SetExtendedTileViewProperties(); void SetText();
+    void SetCurrentFolderFlags(uint mask, uint flags);
+    uint GetCurrentFolderFlags();
+    int GetSortColumnCount();
+    void SetSortColumns([In, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] SortColumn[] columns, int count);
+    void GetSortColumns([Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] SortColumn[] columns, int count);
+  }
+
+  public static class Desktop {
+    const uint FWF_AUTOARRANGE = 0x1;
+    const int SORT_ASCENDING = 1;
+    static readonly PropertyKey ItemNameDisplay = new PropertyKey {
+      FormatId = new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), PropertyId = 10 };
+
+    static IFolderView2 GetView() {
+      Type shellWindowsType = Type.GetTypeFromCLSID(new Guid("9BA05972-F6A8-11CF-A442-00A0C90A8F39"));
+      object shellWindows = Activator.CreateInstance(shellWindowsType);
+      try {
+        // FindWindowSW(CSIDL_DESKTOP, empty, SWC_DESKTOP, out hwnd, SWFO_NEEDDISPATCH)
+        object[] args = { 0, null, 8, 0, 1 };
+        var modifier = new ParameterModifier(5);
+        modifier[0] = true; modifier[1] = true; modifier[3] = true;
+        object dispatch = shellWindowsType.InvokeMember("FindWindowSW", BindingFlags.InvokeMethod, null,
+          shellWindows, args, new[] { modifier }, null, null);
+        if (dispatch == null) throw new InvalidOperationException("The desktop window is not available.");
+        Guid topLevelBrowser = new Guid("4C96BE40-915C-11CF-99D3-00AA004AE837");
+        Guid shellBrowserId = typeof(IShellBrowser).GUID;
+        var browser = (IShellBrowser)((IServiceProvider)dispatch).QueryService(ref topLevelBrowser, ref shellBrowserId);
+        return (IFolderView2)browser.QueryActiveShellView();
+      } finally {
+        Marshal.ReleaseComObject(shellWindows);
+      }
+    }
+
+    public static bool IsAutoArrangedByName() {
+      IFolderView2 view = GetView();
+      if (view.GetAutoArrange() != 0) return false;
+      int count = view.GetSortColumnCount();
+      if (count < 1) return false;
+      var columns = new SortColumn[count];
+      view.GetSortColumns(columns, count);
+      return columns[0].Key.FormatId == ItemNameDisplay.FormatId &&
+        columns[0].Key.PropertyId == ItemNameDisplay.PropertyId &&
+        columns[0].Direction == SORT_ASCENDING;
+    }
+
+    public static void AutoArrangeByName() {
+      IFolderView2 view = GetView();
+      view.SetCurrentFolderFlags(FWF_AUTOARRANGE, FWF_AUTOARRANGE);
+      view.SetSortColumns(new[] { new SortColumn { Key = ItemNameDisplay, Direction = SORT_ASCENDING } }, 1);
+      // Persist now so a forced Explorer restart does not discard the change.
+      ((IShellView)view).SaveViewState();
+    }
+  }
+}
+'@
+}
+$desktopArranged = $null
+for ($attempt = 0; $attempt -lt 20 -and $null -eq $desktopArranged; $attempt++) {
+  try {
+    $desktopArranged = [ChezmoiWindowsSettings.Desktop]::IsAutoArrangedByName()
+  } catch {
+    Start-Sleep -Milliseconds 500
+  }
+}
+if ($null -eq $desktopArranged) {
+  Write-Warning 'The desktop was not available, so desktop icons were not arranged.'
+} elseif (-not $desktopArranged) {
+  Write-Host 'Turning on desktop auto arrange, sorted by name'
+  [ChezmoiWindowsSettings.Desktop]::AutoArrangeByName()
+}
 {{ end -}}
