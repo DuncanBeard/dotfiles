@@ -1,4 +1,5 @@
 README.md
+nix
 tests
 {{ if ne .chezmoi.os "linux" }}
 .config/herdr
