@@ -1,101 +1,64 @@
 {
-  description = "MacBook Pro Darwin system flake";
+  description = "Duncan's machines: nix-darwin + Home Manager (macOS), Home Manager (Linux)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager }:
   let
-    configuration = { pkgs, ... }: {
+    inherit (nixpkgs) lib;
 
-      nixpkgs.config.allowUnfree = true;
-
-      # List packages installed in system profile. To search by name, run:
-      # $ nix search nixpkgs <name>
-      environment.systemPackages =
-        [ pkgs.neovim
-          pkgs.vim
-          pkgs.tmux
-          pkgs.alacritty
-          pkgs.openscad
-          pkgs.vscode
-          pkgs.herdr
-	  pkgs.herdr-core
-	  pkgs.herdr-desktop
-        ];
-
-      # Apps from systemPackages are linked into /Applications/Nix Apps
-      # automatically by nix-darwin; no custom activation script needed.
-
-      homebrew = {
-        enable = true;
-        casks = [
-          "the-unarchiver"
-        ];
-        # Leave anything installed by hand alone.
-        onActivation.cleanup = "none";
+    # Standalone Home Manager for Linux (any distro; not NixOS).
+    mkHome = { name, system, username, modules ? [ ] }:
+      home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
+        modules = [
+          ./home/linux.nix
+          {
+            home.username = username;
+            home.homeDirectory = if username == "root" then "/root" else "/home/${username}";
+            my.hmConfigName = name;
+          }
+        ] ++ modules;
       };
 
-      fonts.packages = [
-        pkgs.nerd-fonts.jetbrains-mono
-      ];
+    # Generic configs: "duncan@x86_64-linux", "duncan@aarch64-linux".
+    # bootstrap.sh falls back to these when there's no "user@hostname" entry.
+    # They're lean (no workstation packages), which suits servers and Pis.
+    generic = lib.listToAttrs (lib.concatMap (system:
+      map (username: rec {
+        name = "${username}@${system}";
+        value = mkHome { inherit name system username; };
+      }) [ "duncan" ]
+    ) [ "x86_64-linux" "aarch64-linux" ]);
 
-      # Determinate Nix manages the Nix installation and daemon itself
-      # (flakes are already enabled). Put extra Nix settings in
-      # /etc/nix/nix.custom.conf instead of nix.settings.
-      nix.enable = false;
-
-      # User that owns user-level options (homebrew, defaults, etc.).
-      system.primaryUser = "duncan";
-
-      # Touch ID for sudo (managed via /etc/pam.d/sudo_local).
-      security.pam.services.sudo_local.touchIdAuth = true;
-
-      # Create /etc/zshrc that loads the nix-darwin environment.
-      programs.zsh.enable = true;  # default shell on catalina
-
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
-
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
-      system.stateVersion = 5;
-
-      # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
+    # Named hosts win over the generic configs (bootstrap.sh tries these first).
+    hosts = {
+      # "duncan@thallium" = mkHome {
+      #   name = "duncan@thallium"; system = "x86_64-linux"; username = "duncan";
+      #   modules = [ { my.workstation = true; } ];
+      # };
     };
   in
   {
     # Build darwin flake using:
     # $ sudo darwin-rebuild switch --flake ~/.local/share/chezmoi/nix
     darwinConfigurations."Duncans-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+      specialArgs = { inherit self; };
       modules = [
-        configuration
+        ./darwin.nix
         nix-homebrew.darwinModules.nix-homebrew
-        {
-          nix-homebrew = {
-            # Install Homebrew under the default prefix
-            enable = true;
-
-            # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-            enableRosetta = true;
-
-            # User owning the Homebrew prefix
-            user = "duncan";
-
-            # Take over the existing /opt/homebrew installation in place.
-            autoMigrate = true;
-
-            # Keep `brew tap` working for existing and future taps.
-            mutableTaps = true;
-          };
-        }
+        home-manager.darwinModules.home-manager
       ];
     };
+
+    homeConfigurations = generic // hosts;
 
     # Expose the package set, including overlays, for convenience.
     darwinPackages = self.darwinConfigurations."Duncans-MacBook-Pro".pkgs;

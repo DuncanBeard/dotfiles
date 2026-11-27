@@ -228,7 +228,7 @@ activate_linux() {
   fi
   step "home-manager switch ($cfg)"
   nix run "github:nix-community/home-manager/$HM_REF" -- \
-    switch -b "pre-hm-$(date +%Y%m%d%H%M%S)" --flake "$FLAKE#$cfg"
+    switch -b pre-hm --flake "$FLAKE#$cfg"
 }
 
 activate_darwin() {
@@ -288,7 +288,7 @@ next_steps() {
     - GitHub CLI:                  gh auth login
     - cloud/k8s (if needed here):  az login / aws configure sso / copy kubeconfigs
     - secrets (if using sops-nix): put your age key in ~/.config/sops/age/keys.txt, re-run
-    - later updates:               git -C $DEST pull, then re-run this script
+    - later updates:               git -C $DEST pull && hms
 EOF
 }
 

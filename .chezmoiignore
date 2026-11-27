@@ -1,5 +1,14 @@
 README.md
 nix
+{{ if ne .chezmoi.os "windows" }}
+# Owned by Home Manager (nix/home) on macOS/Linux. This block exists only on
+# the nix branch, so machines on main are unaffected.
+.zshrc
+.bash_profile
+.inputrc
+.gitconfig
+.ssh/config
+{{ end }}
 tests
 {{ if ne .chezmoi.os "linux" }}
 .config/herdr
