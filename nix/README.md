@@ -26,14 +26,23 @@ bootstrap.sh       new-machine setup (see below)
 
 ## Opting a machine in
 
+The repo lives at `~/.dotfiles` on every machine.
+
 ```sh
-git clone https://github.com/DuncanBeard/dotfiles.git ~/.local/share/chezmoi
-git -C ~/.local/share/chezmoi switch nix      # the manual gate
-~/.local/share/chezmoi/nix/bootstrap.sh       # --help for options
+git clone https://github.com/DuncanBeard/dotfiles.git ~/.dotfiles
+git -C ~/.dotfiles switch nix      # the manual gate
+~/.dotfiles/nix/bootstrap.sh       # --help for options
 ```
 
 `bootstrap.sh` uses an existing checkout exactly as it is. It never pulls or
 switches branches.
+
+Only if the machine also uses chezmoi, point chezmoi's default folder at the
+repo. Move aside any old checkout there first:
+
+```sh
+ln -s ~/.dotfiles ~/.local/share/chezmoi
+```
 
 ### What the first switch does to existing files
 
@@ -54,13 +63,11 @@ mv ~/.ssh/config.local ~/.ssh/config
 
 ### This Mac specifically
 
-The local chezmoi checkout is behind `main` and has uncommitted changes.
-Sort that out first, and **don't commit `private_dot_ssh/`** (public repo).
-Then:
+Already set up: the repo is at `~/.dotfiles` on `nix`, and
+`~/.local/share/chezmoi` is a symlink to it. To opt in:
 
 ```sh
-cd ~/.local/share/chezmoi && git pull && git switch nix
-sudo darwin-rebuild switch --flake ~/.local/share/chezmoi/nix
+sudo darwin-rebuild switch --flake ~/.dotfiles/nix
 ```
 
 `~/.config/nix` (the old flake) can be deleted once you're happy.
@@ -70,7 +77,7 @@ sudo darwin-rebuild switch --flake ~/.local/share/chezmoi/nix
 | | |
 |---|---|
 | Apply | `hms` (alias: darwin-rebuild on macOS, home-manager on Linux) |
-| Update pins | `nix flake update --flake ~/.local/share/chezmoi/nix`, then commit `flake.lock` |
+| Update pins | `nix flake update --flake ~/.dotfiles/nix`, then commit `flake.lock` |
 | Roll back | `sudo darwin-rebuild --rollback` / `home-manager switch --rollback` |
 | Add a Linux host | add it to `hosts` in `flake.nix` (`my.workstation = true` for dev tools) |
 

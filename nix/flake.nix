@@ -48,7 +48,7 @@
   in
   {
     # Build darwin flake using:
-    # $ sudo darwin-rebuild switch --flake ~/.local/share/chezmoi/nix
+    # $ sudo darwin-rebuild switch --flake ~/.dotfiles/nix
     darwinConfigurations."Duncans-MacBook-Pro" = nix-darwin.lib.darwinSystem {
       specialArgs = { inherit self; };
       modules = [

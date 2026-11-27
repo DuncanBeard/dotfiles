@@ -2,9 +2,9 @@
 # bootstrap.sh: set up a machine from the nix/ flake in github.com/DuncanBeard/dotfiles
 #
 # The `nix` branch is main (chezmoi) + this nix/ directory. Opting in is manual:
-#   git clone https://github.com/DuncanBeard/dotfiles.git ~/.local/share/chezmoi
-#   git -C ~/.local/share/chezmoi switch nix     # <- your gate
-#   ~/.local/share/chezmoi/nix/bootstrap.sh
+#   git clone https://github.com/DuncanBeard/dotfiles.git ~/.dotfiles
+#   git -C ~/.dotfiles switch nix     # <- your gate
+#   ~/.dotfiles/nix/bootstrap.sh
 # An existing checkout is used exactly as-is: the script never pulls or switches.
 #
 # Without a checkout it clones $BRANCH itself:
@@ -30,7 +30,7 @@ REPO="${REPO:-https://github.com/DuncanBeard/dotfiles.git}"
 PUSH_URL="${PUSH_URL:-git@github.com:DuncanBeard/dotfiles.git}"
 BRANCH="${BRANCH:-nix}"     # only used when cloning fresh
 DEST="${DEST:-}"            # repo checkout; default: the one this script is in,
-                            # else ~/.local/share/chezmoi (chezmoi's default)
+                            # else ~/.dotfiles
 FLAKE_SUBDIR=nix
 FLAKE=""                    # set by resolve_dest: $DEST/$FLAKE_SUBDIR
 CONFIG="${CONFIG:-}"        # force a flake config name; default is auto-detected
@@ -51,7 +51,7 @@ Usage: bootstrap.sh [options]
   --config NAME    Flake config to activate (default: auto-detect)
   --branch NAME    Repo branch (default: $BRANCH)
   --dest DIR       Repo checkout (default: this script's checkout,
-                   else ~/.local/share/chezmoi)
+                   else ~/.dotfiles)
   --linger         Linux: enable systemd linger so user services run logged-out
   --no-chsh        Linux: don't change the login shell
   --no-trust       Don't add you to Nix trusted-users
@@ -172,7 +172,7 @@ resolve_dest() {
     top="$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null || true)"
     [ -n "$top" ] && [ -f "$top/$FLAKE_SUBDIR/flake.nix" ] && DEST="$top"
   fi
-  DEST="${DEST:-$HOME/.local/share/chezmoi}"
+  DEST="${DEST:-$HOME/.dotfiles}"
   FLAKE="$DEST/$FLAKE_SUBDIR"
 }
 

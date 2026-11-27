@@ -8,8 +8,11 @@
 
   options.my.repoPath = lib.mkOption {
     type = lib.types.str;
-    default = "${config.home.homeDirectory}/.local/share/chezmoi";
-    description = "Where the dotfiles repo is checked out (the flake is in nix/).";
+    default = "${config.home.homeDirectory}/.dotfiles";
+    description = ''
+      Where the dotfiles repo is checked out (the flake is in nix/). Machines that
+      also use chezmoi symlink ~/.local/share/chezmoi to it.
+    '';
   };
 
   config = {
