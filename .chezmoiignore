@@ -36,3 +36,5 @@ Library
 AppData/Local/Microsoft/PowerToys
 .logseq
 {{ end }}
+# Editor workspace for this repo, not a dotfile
+chezmoi.code-workspace
