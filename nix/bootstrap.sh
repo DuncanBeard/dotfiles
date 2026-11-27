@@ -46,8 +46,28 @@ OS="$(uname -s)"
 OS_RELEASE="${OS_RELEASE:-/etc/os-release}"  # overridable for tests
 
 # SteamOS (Steam Deck): read-only root, so no distro packages and no chsh.
-# The installer picks its steam-deck mode itself (/nix lives in /home/nix).
+# Nix goes in via the installer's steam-deck mode (/nix is backed by /home).
 is_steamos() { grep -qE '^ID="?steamos"?$' "$OS_RELEASE" 2>/dev/null; }
+STEAMOS_OFFLOAD="${STEAMOS_OFFLOAD:-/home/.steamos/offload/nix}"       # overridable for tests
+STEAMOS_NIX_MOUNT="${STEAMOS_NIX_MOUNT:-/usr/lib/systemd/system/nix.mount}"
+NIX_RECEIPT="${NIX_RECEIPT:-/nix/receipt.json}"
+
+# Newer SteamOS mounts /nix from $STEAMOS_OFFLOAD (its own nix.mount unit).
+# When an install fails, the installer's revert deletes that folder while
+# /nix stays mounted on it, so the next install fails with "creating directory
+# /nix/var: No such file or directory" (DeterminateSystems/nix-installer#1602).
+# Before installing: unmount /nix and leave the folder present but empty.
+steamos_reset_nix_mount() {
+  grep -q "What=$STEAMOS_OFFLOAD" "$STEAMOS_NIX_MOUNT" 2>/dev/null || return 0
+  if [ -e "$NIX_RECEIPT" ]; then
+    die "a previous Nix install exists: run 'sudo /nix/nix-installer uninstall', reboot, then re-run"
+  fi
+  info "SteamOS: resetting /nix (unmount, empty $STEAMOS_OFFLOAD)"
+  $SUDO systemctl stop nix.mount 2>/dev/null || true
+  $SUDO umount -R /nix 2>/dev/null || true
+  $SUDO mkdir -p "$STEAMOS_OFFLOAD"
+  $SUDO find "$STEAMOS_OFFLOAD" -mindepth 1 -delete
+}
 
 usage() {
   cat <<EOF
@@ -143,6 +163,7 @@ install_nix() {
       # workaround confirmed in DeterminateSystems/nix-installer#1602.
       info "SteamOS: installing standard Nix (Determinate Nix needs a writable /usr/local)"
       args=(install steam-deck --prefer-upstream-nix)
+      steamos_reset_nix_mount
     fi
     if [ "$OS" = Linux ] && [ ! -d /run/systemd/system ]; then
       # containers / WSL without systemd: no daemon, so it only works as root
