@@ -28,14 +28,15 @@
         ] ++ modules;
       };
 
-    # Generic configs: "duncan@x86_64-linux", "duncan@aarch64-linux".
+    # Generic configs: "duncan@x86_64-linux", "root@aarch64-linux", etc.
     # bootstrap.sh falls back to these when there's no "user@hostname" entry.
     # They're lean (no workstation packages), which suits servers and Pis.
+    # root covers containers/LXC, where Nix runs without a daemon as root.
     generic = lib.listToAttrs (lib.concatMap (system:
       map (username: rec {
         name = "${username}@${system}";
         value = mkHome { inherit name system username; };
-      }) [ "duncan" ]
+      }) [ "duncan" "root" ]
     ) [ "x86_64-linux" "aarch64-linux" ]);
 
     # Named hosts win over the generic configs (bootstrap.sh tries these first).
