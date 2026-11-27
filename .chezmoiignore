@@ -9,6 +9,10 @@ nix
 .gitconfig
 .ssh/config
 {{ end }}
+{{ if eq .chezmoi.os "darwin" }}
+# nix-darwin's homebrew module installs packages on this branch (nix/darwin.nix)
+darwin-install-packages.sh
+{{ end }}
 tests
 {{ if ne .chezmoi.os "linux" }}
 .config/herdr
