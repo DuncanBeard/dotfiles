@@ -43,6 +43,11 @@ NIX_BIN=/nix/var/nix/profiles/default/bin/nix
 # unset in Docker; exported because home-manager and its activation read $USER
 export USER="${USER:-$(id -un)}"
 OS="$(uname -s)"
+OS_RELEASE="${OS_RELEASE:-/etc/os-release}"  # overridable for tests
+
+# SteamOS (Steam Deck): read-only root, so no distro packages and no chsh.
+# The installer picks its steam-deck mode itself (/nix lives in /home/nix).
+is_steamos() { grep -qE '^ID="?steamos"?$' "$OS_RELEASE" 2>/dev/null; }
 
 usage() {
   cat <<EOF
@@ -90,13 +95,22 @@ setup_sudo() {
   have sudo || die "need root or sudo"
   SUDO="sudo"
   info "sudo may prompt for your password once"
-  sudo -v
+  if ! sudo -v; then
+    is_steamos && die "sudo failed. SteamOS has no password for deck by default: run 'passwd' first"
+    die "sudo failed"
+  fi
   # keep the sudo timestamp fresh while Nix installs (can take minutes)
   ( while kill -0 "$$" 2>/dev/null; do sudo -n true; sleep 50; done ) 2>/dev/null &
 }
 
 # ------------------------------------------------------------ 1. prerequisites
 install_prereqs_linux() {
+  if is_steamos; then
+    step "SteamOS: skipping distro packages (read-only system)"
+    have curl || die "curl is missing"
+    have git || info "no system git; Nix's git will be used"
+    return
+  fi
   step "Distro prerequisites (curl, git, zsh)"
   if have curl && have git && have zsh; then info "already installed"; return; fi
   if   have apt-get; then $SUDO apt-get update -qq
@@ -177,29 +191,35 @@ resolve_dest() {
   FLAKE="$DEST/$FLAKE_SUBDIR"
 }
 
+# git, or Nix's git where the system has none (SteamOS). Needs Nix, so only
+# from sync_repo onwards.
+run_git() {
+  if have git; then git "$@"; else nix run nixpkgs#git -- "$@"; fi
+}
+
 sync_repo() {
   step "Config repo: $DEST"
   if [ -e "$DEST/.git" ]; then  # -e: worktrees have a .git *file*
     # Existing checkout: what's checked out is your decision. No pull, no switch.
     local branch
-    branch="$(git -C "$DEST" symbolic-ref --short -q HEAD || echo "detached HEAD")"
-    info "using checkout as-is: $branch @ $(git -C "$DEST" log -1 --format='%h %s')"
+    branch="$(run_git -C "$DEST" symbolic-ref --short -q HEAD || echo "detached HEAD")"
+    info "using checkout as-is: $branch @ $(run_git -C "$DEST" log -1 --format='%h %s')"
     [ -f "$FLAKE/flake.nix" ] \
       || die "no $FLAKE_SUBDIR/flake.nix on '$branch'. To opt in: git -C $DEST switch $BRANCH"
-    git -C "$DEST" diff --quiet HEAD -- "$FLAKE_SUBDIR" \
+    run_git -C "$DEST" diff --quiet HEAD -- "$FLAKE_SUBDIR" \
       || warn "uncommitted changes in $FLAKE_SUBDIR/ will be used"
-    [ -z "$(git -C "$DEST" ls-files --others --exclude-standard -- "$FLAKE_SUBDIR")" ] \
+    [ -z "$(run_git -C "$DEST" ls-files --others --exclude-standard -- "$FLAKE_SUBDIR")" ] \
       || warn "untracked files in $FLAKE_SUBDIR/ are invisible to the flake (git add them)"
   elif [ -e "$DEST" ] && [ -n "$(ls -A "$DEST" 2>/dev/null)" ]; then
     die "$DEST exists and isn't a git checkout; move it aside and re-run"
   else
     info "cloning $REPO ($BRANCH)"
     mkdir -p "$(dirname "$DEST")"
-    git clone --quiet --branch "$BRANCH" "$REPO" "$DEST"
+    run_git clone --quiet --branch "$BRANCH" "$REPO" "$DEST"
     # pull anonymously over https, push over ssh (1Password agent)
-    git -C "$DEST" remote set-url --push origin "$PUSH_URL"
+    run_git -C "$DEST" remote set-url --push origin "$PUSH_URL"
     [ -f "$FLAKE/flake.nix" ] || die "no $FLAKE_SUBDIR/flake.nix on branch $BRANCH"
-    info "at $(git -C "$DEST" log -1 --format='%h %s')"
+    info "at $(run_git -C "$DEST" log -1 --format='%h %s')"
   fi
 }
 
@@ -257,6 +277,12 @@ activate_darwin() {
 set_login_shell() {
   [ "$CHSH" = 1 ] || return 0
   step "Login shell"
+  if is_steamos; then
+    # Keep SteamOS's bash so logins work even if /nix isn't mounted;
+    # interactive bash switches to zsh instead (home/steamdeck.nix).
+    info "SteamOS: keeping bash as the login shell (it hands off to zsh)"
+    return
+  fi
   local current zsh_path
   current="$(getent passwd "$USER" 2>/dev/null | cut -d: -f7 || true)"
   case "$current" in */zsh) info "already $current"; return;; esac

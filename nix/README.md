@@ -74,6 +74,36 @@ sudo darwin-rebuild switch --flake ~/.dotfiles/nix
 
 `~/.config/nix` (the old flake) can be deleted once you're happy.
 
+## Steam Deck
+
+Config `deck@steamdeck` (`home/steamdeck.nix`). Nix lives in `/home/nix` (the
+installer's Steam Deck mode), so it survives SteamOS updates. Game Mode is
+unaffected.
+
+1. Desktop Mode, then Konsole. SteamOS ships without a password, and the
+   installer needs `sudo`:
+   ```sh
+   passwd
+   sudo systemctl enable --now sshd   # optional: do the rest over SSH from the Mac
+   ```
+2. In Konsole, or `ssh deck@steamdeck` from the Mac:
+   ```sh
+   git clone https://github.com/DuncanBeard/dotfiles.git ~/.dotfiles
+   git -C ~/.dotfiles switch nix
+   ~/.dotfiles/nix/bootstrap.sh
+   ```
+   With no `git` on the system, use
+   `bash <(curl -fsSL https://raw.githubusercontent.com/DuncanBeard/dotfiles/nix/nix/bootstrap.sh)`
+   instead; it clones the `nix` branch using Nix's git.
+3. Konsole: Settings > Edit Current Profile > Appearance > Font, pick
+   **Hack Nerd Font**. Open a new tab.
+
+Notes:
+- The login shell stays SteamOS's bash. Interactive bash (Konsole, SSH)
+  switches to zsh, and stays in bash if `/nix` is ever missing.
+- Renamed the Deck? Pass `--config deck@steamdeck`.
+- Remove Nix entirely: `/nix/nix-installer uninstall`.
+
 ## Day to day
 
 | | |

@@ -41,6 +41,11 @@
 
     # Named hosts win over the generic configs (bootstrap.sh tries these first).
     hosts = {
+      # Steam Deck: SteamOS's default user and hostname.
+      "deck@steamdeck" = mkHome {
+        name = "deck@steamdeck"; system = "x86_64-linux"; username = "deck";
+        modules = [ ./home/steamdeck.nix ];
+      };
       # "duncan@thallium" = mkHome {
       #   name = "duncan@thallium"; system = "x86_64-linux"; username = "duncan";
       #   modules = [ { my.workstation = true; } ];
