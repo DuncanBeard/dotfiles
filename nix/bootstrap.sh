@@ -250,6 +250,14 @@ activate_linux() {
   step "home-manager switch ($cfg)"
   nix run "github:nix-community/home-manager/$HM_REF" -- \
     switch -b pre-hm --flake "$FLAKE#$cfg"
+
+  # Configs with targets.genericLinux.gpu (e.g. the Steam Deck) install this.
+  # It points /run/opengl-driver at Nix's drivers, for Nix-built GUI apps.
+  local gpu="$HOME/.nix-profile/bin/non-nixos-gpu-setup"
+  if [ -x "$gpu" ]; then
+    step "GPU drivers for Nix apps (one-time root setup)"
+    $SUDO "$(readlink -f "$gpu")"
+  fi
 }
 
 activate_darwin() {

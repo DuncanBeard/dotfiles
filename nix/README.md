@@ -11,6 +11,8 @@ home/shell.nix     zsh (oh-my-zsh + oh-my-posh), bash, readline
 home/bash/prompt.sh  bash prompt, history, nvm (plain shell, no Nix escaping)
 home/packages.nix  CLI packages (Linux only for now); `my.workstation` adds dev tools
 home/darwin.nix    macOS user bits: Apple git, brew shellenv, 1Password agent, Ghostty, mac aliases
+home/ghostty.nix   Ghostty settings shared by macOS and the Steam Deck
+home/steamdeck.nix Steam Deck: Ghostty, Konsole profile, Nerd Font, GPU drivers, bash -> zsh
 home/linux.nix     non-NixOS fixes, `home-manager` CLI, weekly GC
 bootstrap.sh       new-machine setup (see below)
 ```
@@ -95,14 +97,20 @@ unaffected.
    With no `git` on the system, use
    `bash <(curl -fsSL https://raw.githubusercontent.com/DuncanBeard/dotfiles/nix/nix/bootstrap.sh)`
    instead; it clones the `nix` branch using Nix's git.
-3. Konsole: Settings > Edit Current Profile > Appearance > Font, pick
-   **Hack Nerd Font**. Open a new tab.
+3. Log out of Desktop Mode and back in (or reboot) so the menu picks up Ghostty.
 
-Notes:
+What you get:
+- Konsole: a "Nix" profile (Hack Nerd Font, 10 pt) set as the default. Change
+  it in `steamdeck.nix`; the profile file is read-only to Konsole.
+- Ghostty from nixpkgs, sharing `home/ghostty.nix` with the Mac.
+- GPU drivers for Nix GUI apps (`/run/opengl-driver`). bootstrap.sh does the
+  one-time root setup. If a later `hms` updates the drivers, it prints the
+  `sudo ... non-nixos-gpu-setup` command to run again.
 - The login shell stays SteamOS's bash. Interactive bash (Konsole, SSH)
   switches to zsh, and stays in bash if `/nix` is ever missing.
-- Renamed the Deck? Pass `--config deck@steamdeck`.
-- Remove Nix entirely: `/nix/nix-installer uninstall`.
+
+Renamed the Deck? Pass `--config deck@steamdeck`. Remove Nix entirely with
+`/nix/nix-installer uninstall`.
 
 ## Day to day
 

@@ -1,7 +1,7 @@
 # macOS user config (loaded by nix-darwin; see ../darwin.nix).
 { config, lib, pkgs, ... }:
 {
-  imports = [ ./common.nix ];
+  imports = [ ./common.nix ./ghostty.nix ];
 
   # Keep Apple's git: it reads /etc/gitconfig (Azure Repos credential setting),
   # which Nix's git wouldn't.
@@ -22,39 +22,17 @@
   home.shellAliases.hms = "sudo darwin-rebuild switch --flake ${config.my.repoPath}/nix";
 
   # ------------------------------------------------------------ Ghostty
-  # Ghostty.app itself comes from the Homebrew cask (../darwin.nix).
+  # Shared settings are in ./ghostty.nix. Ghostty.app itself comes from the
+  # Homebrew cask (../darwin.nix). Ported from
+  # ~/Library/Application Support/com.mitchellh.ghostty/config.
   programs.ghostty = {
-    enable = true;
     package = null;
-    # Ghostty injects its own shell integration; HM's version needs the package.
-    enableBashIntegration = false;
-    enableZshIntegration = false;
-    enableFishIntegration = false;
-    installBatSyntax = false;
-
-    # -> ~/.config/ghostty/config. Ported from
-    # ~/Library/Application Support/com.mitchellh.ghostty/config.
     settings = {
-      # Nerd Font build (installed by nix-darwin), so the prompt's icons render.
-      # Not the "Mono" variant: Ghostty sizes Nerd Font icons itself, and Mono's
-      # are pre-shrunk. The old value "Hack" matched no installed family, so
-      # Ghostty had silently fallen back to its built-in default font.
-      font-family = "Hack Nerd Font";
       font-size = 16;
-      background-opacity = 1;
-      split-divider-color = "#de8d5a";
-
       # macOS: make Option work as Alt
       macos-option-as-alt = true;
-
-      # SSH: automatic terminfo + env. The old file set this twice and the
-      # second line won, which left sudo integration off; same here.
-      shell-integration-features = "ssh-env,ssh-terminfo";
-
-      copy-on-select = "clipboard";
-      clipboard-paste-protection = false;
-      window-save-state = "always";
-
+      window-save-state = "always";  # macOS only
+      # super = Cmd
       keybind = [
         "super+r=clear_screen"
         "super+f=toggle_fullscreen"

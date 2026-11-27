@@ -12,6 +12,11 @@
     # Non-NixOS fixes: XDG_DATA_DIRS, Nix env in shells, distro zsh functions.
     targets.genericLinux.enable = true;
 
+    # Graphics drivers for Nix GUI apps. Upstream turns this on by default,
+    # which costs every server ~1 GiB (mesa) plus a setup warning on each
+    # switch. Only machines with a screen need it (see steamdeck.nix).
+    targets.genericLinux.gpu.enable = lib.mkDefault false;
+
     # Puts the pinned `home-manager` command on PATH.
     programs.home-manager.enable = true;
 
