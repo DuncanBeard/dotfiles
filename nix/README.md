@@ -80,7 +80,8 @@ sudo darwin-rebuild switch --flake ~/.dotfiles/nix
 
 Config `deck@steamdeck` (`home/steamdeck.nix`). Nix lives in `/home/nix` (the
 installer's Steam Deck mode), so it survives SteamOS updates. Game Mode is
-unaffected.
+unaffected. The Deck gets standard Nix, not Determinate Nix: the installer puts
+Determinate's daemon in `/usr/local/bin`, which is read-only on SteamOS.
 
 1. Desktop Mode, then Konsole. SteamOS ships without a password, and the
    installer needs `sudo`:
