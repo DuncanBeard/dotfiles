@@ -178,7 +178,7 @@ resolve_dest() {
 
 sync_repo() {
   step "Config repo: $DEST"
-  if [ -d "$DEST/.git" ]; then
+  if [ -e "$DEST/.git" ]; then  # -e: worktrees have a .git *file*
     # Existing checkout: what's checked out is your decision. No pull, no switch.
     local branch
     branch="$(git -C "$DEST" symbolic-ref --short -q HEAD || echo "detached HEAD")"
