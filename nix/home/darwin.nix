@@ -21,6 +21,64 @@
 
   home.shellAliases.hms = "sudo darwin-rebuild switch --flake ${config.my.repoPath}/nix";
 
+  # ------------------------------------------------------------ Ghostty
+  # Ghostty.app itself comes from the Homebrew cask (../darwin.nix).
+  programs.ghostty = {
+    enable = true;
+    package = null;
+    # Ghostty injects its own shell integration; HM's version needs the package.
+    enableBashIntegration = false;
+    enableZshIntegration = false;
+    enableFishIntegration = false;
+    installBatSyntax = false;
+
+    # -> ~/.config/ghostty/config. Ported from
+    # ~/Library/Application Support/com.mitchellh.ghostty/config.
+    settings = {
+      # Nerd Font build (installed by nix-darwin), so the prompt's icons render.
+      # Not the "Mono" variant: Ghostty sizes Nerd Font icons itself, and Mono's
+      # are pre-shrunk. The old value "Hack" matched no installed family, so
+      # Ghostty had silently fallen back to its built-in default font.
+      font-family = "Hack Nerd Font";
+      font-size = 16;
+      background-opacity = 1;
+      split-divider-color = "#de8d5a";
+
+      # macOS: make Option work as Alt
+      macos-option-as-alt = true;
+
+      # SSH: automatic terminfo + env. The old file set this twice and the
+      # second line won, which left sudo integration off; same here.
+      shell-integration-features = "ssh-env,ssh-terminfo";
+
+      copy-on-select = "clipboard";
+      clipboard-paste-protection = false;
+      window-save-state = "always";
+
+      keybind = [
+        "super+r=clear_screen"
+        "super+f=toggle_fullscreen"
+        "super+arrow_left=previous_tab"
+        "super+arrow_right=next_tab"
+      ];
+    };
+  };
+
+  # Ghostty also loads its Application Support config files, which would
+  # override the managed one. Move them aside on the first switch.
+  home.activation.retireGhosttyAppSupportConfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    d="$HOME/Library/Application Support/com.mitchellh.ghostty"
+    for f in "$d/config" "$d/config.ghostty"; do
+      if [ -f "$f" ] && [ ! -L "$f" ]; then
+        if [ -e "$f.pre-hm" ]; then
+          warnEcho "$f would override Home Manager's Ghostty config but $f.pre-hm exists; move it aside manually"
+        else
+          run mv $VERBOSE_ARG "$f" "$f.pre-hm"
+        fi
+      fi
+    done
+  '';
+
   # ---------------------------------------------------------------- zsh
   # ~/.zprofile (login shells). Dropped from the old one: the Python 3.10
   # framework PATH (brew's python3 already came first) and a duplicate ~/.local/bin.

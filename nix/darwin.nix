@@ -79,6 +79,8 @@
 
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
+    # Ghostty's font (home/darwin.nix). Nerd Font build, so prompt icons render.
+    pkgs.nerd-fonts.hack
   ];
 
   # Determinate Nix manages the Nix installation and daemon itself

@@ -10,7 +10,7 @@ home/common.nix    every machine: git, tmux, ssh, first-switch takeover
 home/shell.nix     zsh (oh-my-zsh + oh-my-posh), bash, readline
 home/bash/prompt.sh  bash prompt, history, nvm (plain shell, no Nix escaping)
 home/packages.nix  CLI packages (Linux only for now); `my.workstation` adds dev tools
-home/darwin.nix    macOS user bits: Apple git, brew shellenv, 1Password agent, mac aliases
+home/darwin.nix    macOS user bits: Apple git, brew shellenv, 1Password agent, Ghostty, mac aliases
 home/linux.nix     non-NixOS fixes, `home-manager` CLI, weekly GC
 bootstrap.sh       new-machine setup (see below)
 ```
@@ -51,6 +51,7 @@ ln -s ~/.dotfiles ~/.local/share/chezmoi
 | `.zshrc` `.zprofile` `.bash_profile` `.bashrc` `.profile` `.inputrc` `.config/git/ignore` | renamed `*.pre-hm`; HM's version is linked in its place |
 | `.gitconfig`, `.tmux.conf` | renamed `*.pre-hm` (they'd shadow HM's `~/.config/...` files) |
 | `.ssh/config` | renamed `.ssh/config.local`; HM's `.ssh/config` Includes it, so all hosts keep working |
+| macOS: Ghostty's `config` and `config.ghostty` in `~/Library/Application Support/com.mitchellh.ghostty/` | renamed `*.pre-hm` (Ghostty would load them on top of HM's `~/.config/ghostty/config`) |
 
 Nothing is deleted. To undo on macOS, switch back to the old flake, restore the
 `*.pre-hm` files, and move `config.local` back:
@@ -59,6 +60,7 @@ Nothing is deleted. To undo on macOS, switch back to the old flake, restore the
 sudo darwin-rebuild switch --flake ~/.config/nix   # the pre-HM system
 for f in ~/.*.pre-hm ~/.config/git/ignore.pre-hm; do mv "$f" "${f%.pre-hm}"; done
 mv ~/.ssh/config.local ~/.ssh/config
+G=~/Library/Application\ Support/com.mitchellh.ghostty; for f in "$G"/*.pre-hm; do mv "$f" "${f%.pre-hm}"; done
 ```
 
 ### This Mac specifically
@@ -90,6 +92,6 @@ SSH host list (`~/.ssh/config.local`). This repo is public.
 
 ## Not migrated yet
 
-Ghostty, VS Code, Zed, LaunchAgents, `system.defaults`, Mac App Store apps.
+VS Code, Zed, LaunchAgents, `system.defaults`, Mac App Store apps.
 On macOS, CLI tools still come from Homebrew, because the Hermes and OpenClaw
 LaunchAgents hard-code `/opt/homebrew`.
