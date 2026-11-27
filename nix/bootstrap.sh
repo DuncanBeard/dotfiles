@@ -40,7 +40,8 @@ CHSH=1
 TRUST=1
 
 NIX_BIN=/nix/var/nix/profiles/default/bin/nix
-USER="${USER:-$(id -un)}"   # unset in some containers
+# unset in Docker; exported because home-manager and its activation read $USER
+export USER="${USER:-$(id -un)}"
 OS="$(uname -s)"
 
 usage() {
