@@ -6,7 +6,7 @@ Manager). Chezmoi ignores this directory (see `../.chezmoiignore`).
 ```
 flake.nix          inputs; darwinConfigurations; homeConfigurations (mkHome)
 darwin.nix         macOS system: Homebrew brews/casks, fonts, Touch ID, HM wiring
-home/common.nix    every machine: git, tmux, ssh, first-switch takeover
+home/common.nix    every machine: git, tmux, tealdeer, ssh, first-switch takeover
 home/shell.nix     zsh (oh-my-zsh + oh-my-posh), bash, readline
 home/bash/prompt.sh  bash prompt, history, nvm (plain shell, no Nix escaping)
 home/packages.nix  CLI packages (Linux only for now); `my.workstation` adds dev tools

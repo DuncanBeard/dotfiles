@@ -53,6 +53,15 @@
       clock24 = true;
     };
 
+    # ------------------------------------------------------------- tealdeer
+    # `tldr` pages. tealdeer refreshes its own cache on use (and fetches it on
+    # first run), so skip HM's launchd agent / systemd timer for updates.
+    programs.tealdeer = {
+      enable = true;
+      enableAutoUpdates = false;
+      settings.updates.auto_update = true;
+    };
+
     # ------------------------------------------------------------------ ssh
     programs.ssh = {
       enable = true;
