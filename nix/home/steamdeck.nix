@@ -3,6 +3,10 @@
 let
   zsh = "${config.home.profileDirectory}/bin/zsh";
   fontSize = 10;  # KDE's default monospace size; Konsole and Ghostty both use it
+  # KDE's default terminal. KDE starts it in the target folder (e.g. Dolphin's
+  # "Open Terminal Here"), but a single-instance Ghostty would open the window
+  # in its existing window's folder, so run a separate process that inherits it.
+  terminal = "${config.home.profileDirectory}/bin/ghostty --gtk-single-instance=false --working-directory=inherit";
 in
 {
   imports = [ ./ghostty.nix ];
@@ -33,17 +37,22 @@ in
     Parent=FALLBACK/
   '';
 
-  # konsolerc belongs to Konsole (it saves window state there), so set only
-  # the default-profile key, with KDE's own config tool.
-  home.activation.konsoleDefaultProfile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  # konsolerc and kdeglobals belong to KDE (it saves its own state there), so
+  # set only these keys, with KDE's own config tool.
+  home.activation.kdeDefaults = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     kwc=""
     for k in /usr/bin/kwriteconfig6 /usr/bin/kwriteconfig5; do
       [ -x "$k" ] && { kwc="$k"; break; }
     done
     if [ -n "$kwc" ]; then
+      # Konsole's default profile
       run "$kwc" --file konsolerc --group "Desktop Entry" --key DefaultProfile Nix.profile
+      # KDE's default terminal (Dolphin's "Open Terminal Here", etc.).
+      # TerminalService would take precedence over TerminalApplication.
+      run "$kwc" --file kdeglobals --group General --key TerminalApplication "${terminal}"
+      run "$kwc" --file kdeglobals --group General --key TerminalService --delete
     else
-      warnEcho "kwriteconfig not found; pick the 'Nix' profile in Konsole manually"
+      warnEcho "kwriteconfig not found; set Konsole's profile and KDE's default terminal manually"
     fi
   '';
 

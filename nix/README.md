@@ -103,7 +103,9 @@ Determinate's daemon in `/usr/local/bin`, which is read-only on SteamOS.
 What you get:
 - Konsole: a "Nix" profile (Hack Nerd Font, 10 pt) set as the default. Change
   it in `steamdeck.nix`; the profile file is read-only to Konsole.
-- Ghostty from nixpkgs, sharing `home/ghostty.nix` with the Mac.
+- Ghostty from nixpkgs, sharing `home/ghostty.nix` with the Mac, and set as
+  KDE's default terminal (Dolphin's "Open Terminal Here" etc.). Ctrl+Alt+T is
+  still bound to Konsole.
 - GPU drivers for Nix GUI apps (`/run/opengl-driver`). bootstrap.sh does the
   one-time root setup. If a later `hms` updates the drivers, it prints the
   `sudo ... non-nixos-gpu-setup` command to run again.
