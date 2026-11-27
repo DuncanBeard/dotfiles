@@ -9,7 +9,7 @@ darwin.nix         macOS system: Homebrew brews/casks, fonts, Touch ID, HM wirin
 home/common.nix    every machine: git, tmux, tealdeer, ssh, first-switch takeover
 home/shell.nix     zsh (oh-my-zsh + oh-my-posh), bash, readline
 home/bash/prompt.sh  bash prompt, history, nvm (plain shell, no Nix escaping)
-home/packages.nix  CLI packages (Linux only for now); `my.workstation` adds dev tools
+home/packages.nix  CLI packages; `my.workstation` adds dev tools (on for the Mac)
 home/darwin.nix    macOS user bits: Apple git, brew shellenv, 1Password agent, Ghostty, mac aliases
 home/ghostty.nix   Ghostty settings shared by macOS and the Steam Deck
 home/steamdeck.nix Steam Deck: Ghostty, Konsole profile, Nerd Font, GPU drivers, bash -> zsh
@@ -134,5 +134,7 @@ SSH host list (`~/.ssh/config.local`). This repo is public.
 ## Not migrated yet
 
 VS Code, Zed, LaunchAgents, `system.defaults`, Mac App Store apps.
-On macOS, CLI tools still come from Homebrew, because the Hermes and OpenClaw
-LaunchAgents hard-code `/opt/homebrew`.
+On macOS, CLI tools that the Hermes and OpenClaw LaunchAgents run still come
+from Homebrew, because those agents hard-code `/opt/homebrew`. Homebrew's
+`bin` is also first on PATH, so when moving a tool to Nix, `brew uninstall` it
+too (dropping it from `brews` doesn't).

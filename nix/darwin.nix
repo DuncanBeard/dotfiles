@@ -27,27 +27,24 @@
     # Leave anything installed by hand alone.
     onActivation.cleanup = "none";
 
-    # On macOS, Homebrew stays the source of CLI tools for now: the Hermes and
-    # OpenClaw LaunchAgents hard-code /opt/homebrew (PATH, signal-cli, node).
-    # This list is the `brew leaves` set as of 2026-11-26, declared so a new
-    # Mac gets the same tools. Already installed here, so activation is a no-op.
+    # Most CLI tools come from nixpkgs (home/packages.nix). These stay in
+    # Homebrew because the Hermes and OpenClaw LaunchAgents hard-code
+    # /opt/homebrew (PATH, signal-cli, node) and run them, or because nixpkgs
+    # doesn't have them (cliclick, imagesnap, memo, imsg, remindctl,
+    # notesmd-cli, summarize, mole), or they're libraries for builds outside
+    # Nix (sdl2_*, libuvc). Already installed here, so activation is a no-op.
+    # Removing a brew from this list doesn't uninstall it (cleanup = "none").
     taps = [
       "antoniorodr/memo"
-      "golangci/tap"
-      "hashicorp/tap"
       "steipete/tap"
       "yakitrak/yakitrak"
     ];
     brews = [
-      "antoniorodr/memo/memo" "asciinema" "azcopy" "chezmoi" "cliclick" "cmake"
-      "czkawka" "docker" "docker-compose" "doggo" "gh" "ghostscript" "go"
-      "golangci/tap/golangci-lint" "hashicorp/tap/terraform" "helm" "himalaya"
-      "imagesnap" "iperf3" "k9s" "ko" "lazydocker" "libimobiledevice"
-      "libirecovery" "libnfc" "libuvc" "llama.cpp" "lld" "meson" "minikube"
-      "mole" "moreutils" "ncdu" "neovim" "nmap" "openai-whisper" "opencode"
-      "poppler" "qemu" "qrencode" "ranger" "sdl2_image" "sdl2_ttf" "signal-cli"
-      "socat" "sshpass" "steipete/tap/imsg" "steipete/tap/remindctl" "summarize"
-      "tmux" "watch" "wget" "xcodegen" "yakitrak/yakitrak/notesmd-cli"
+      "antoniorodr/memo/memo" "azcopy" "cliclick" "cmake" "docker"
+      "docker-compose" "gh" "ghostscript" "go" "himalaya" "imagesnap" "kubernetes-cli"
+      "libuvc" "llama.cpp" "mole" "openai-whisper" "opencode" "poppler" "qemu"
+      "sdl2_image" "sdl2_ttf" "signal-cli" "sshpass" "steipete/tap/imsg"
+      "steipete/tap/remindctl" "summarize" "yakitrak/yakitrak/notesmd-cli"
     ];
     casks = [
       "balenaetcher"

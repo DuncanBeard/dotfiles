@@ -3,6 +3,9 @@
 {
   imports = [ ./common.nix ./ghostty.nix ];
 
+  # Dev tools from ./packages.nix (the ones Hermes doesn't need from Homebrew).
+  my.workstation = true;
+
   # Keep Apple's git: it reads /etc/gitconfig (Azure Repos credential setting),
   # which Nix's git wouldn't.
   programs.git.package = null;
