@@ -139,9 +139,10 @@ install_nix() {
     local args=(install)
     if is_steamos; then
       # The installer's Steam Deck mode puts determinate-nixd in /usr/local/bin,
-      # which is read-only on SteamOS. Standard Nix doesn't need it.
+      # which is read-only on SteamOS. Standard Nix doesn't need it. This is the
+      # workaround confirmed in DeterminateSystems/nix-installer#1602.
       info "SteamOS: installing standard Nix (Determinate Nix needs a writable /usr/local)"
-      args=(install --prefer-upstream-nix)
+      args=(install steam-deck --prefer-upstream-nix)
     fi
     if [ "$OS" = Linux ] && [ ! -d /run/systemd/system ]; then
       # containers / WSL without systemd: no daemon, so it only works as root
