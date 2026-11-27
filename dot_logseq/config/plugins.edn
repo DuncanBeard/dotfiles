@@ -1,4 +1,4 @@
-{:logseq-journals-calendar {:version "v0.11.0", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
+{:logseq-journals-calendar {:version "v0.11.1", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
  :logseq-copy-code-plugin {:version "v.1.2.0", :repo "vyleung/logseq-copy-code-plugin", :effect true, :theme false}
  :logseq-code-formatter {:version "v1.1.1", :repo "PerfectPan/logseq-plugin-code-formatter", :effect false, :theme false}
  :logseq-monokai {:version "v0.1.1", :repo "tzcl/logseq-monokai", :effect false, :theme true}
