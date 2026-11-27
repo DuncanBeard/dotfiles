@@ -29,5 +29,21 @@
       dates = "weekly";
       options = "--delete-older-than 30d";
     };
+
+    # dbus-broker (SteamOS, Arch) reads D-Bus service files only at startup or
+    # on ReloadConfig. Without this, an app HM just installed (e.g. Ghostty)
+    # fails to launch from the menu with "The name is not activatable" until
+    # the next login. Activation has an empty PATH, hence the absolute paths.
+    home.activation.reloadDbusServices = lib.mkIf (config.dbus.packages != [ ])
+      (lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+        for b in /usr/bin/busctl /bin/busctl; do
+          if [ -x "$b" ]; then
+            run "$b" --user call org.freedesktop.DBus /org/freedesktop/DBus \
+              org.freedesktop.DBus ReloadConfig \
+              || verboseEcho "No user D-Bus session to reload; new apps appear after the next login"
+            break
+          fi
+        done
+      '');
   };
 }
